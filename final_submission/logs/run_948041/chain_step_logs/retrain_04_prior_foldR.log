@@ -1,0 +1,66 @@
+[ 1/65] 10125_0.h5     Re  10142 AoA    0  windows 29  uc 0.74 px/frame  |mu| 0.0004  var 1.03e-05  E_true/E_pred 1.84
+[ 2/65] 10125_10.h5    Re  10142 AoA   10  windows 42  uc 0.64 px/frame  |mu| 0.0005  var 3.10e-05  E_true/E_pred 1.62
+[ 3/65] 10125_15.h5    Re  10142 AoA   15  windows 42  uc 0.60 px/frame  |mu| 0.0007  var 4.60e-05  E_true/E_pred 1.63
+[ 4/65] 10125_20.h5    Re  10142 AoA   20  windows 42  uc 0.53 px/frame  |mu| 0.0008  var 6.52e-05  E_true/E_pred 1.80
+[ 5/65] 10125_5.h5     Re  10142 AoA    5  windows 42  uc 0.72 px/frame  |mu| 0.0004  var 1.34e-05  E_true/E_pred 2.10
+[ 6/65] 11400_0.h5     Re  11420 AoA    0  windows 42  uc 0.80 px/frame  |mu| 0.0004  var 1.31e-05  E_true/E_pred 1.55
+[ 7/65] 11400_10.h5    Re  11420 AoA   10  windows 42  uc 0.72 px/frame  |mu| 0.0006  var 3.61e-05  E_true/E_pred 1.62
+[ 8/65] 11400_15.h5    Re  11420 AoA   15  windows 42  uc 0.67 px/frame  |mu| 0.0007  var 5.26e-05  E_true/E_pred 1.60
+[ 9/65] 11400_20.h5    Re  11420 AoA   20  windows 42  uc 0.60 px/frame  |mu| 0.0010  var 7.72e-05  E_true/E_pred 1.66
+[10/65] 11400_5.h5     Re  11420 AoA    5  windows 42  uc 0.80 px/frame  |mu| 0.0003  var 1.42e-05  E_true/E_pred 2.47
+[11/65] 12675_0.h5     Re  12698 AoA    0  windows 42  uc 0.86 px/frame  |mu| 0.0004  var 1.48e-05  E_true/E_pred 2.04
+[12/65] 12675_10.h5    Re  12698 AoA   10  windows 42  uc 0.78 px/frame  |mu| 0.0007  var 4.98e-05  E_true/E_pred 1.71
+[13/65] 12675_15.h5    Re  12698 AoA   15  windows 42  uc 0.74 px/frame  |mu| 0.0009  var 6.33e-05  E_true/E_pred 1.68
+[14/65] 12675_20.h5    Re  12698 AoA   20  windows 42  uc 0.67 px/frame  |mu| 0.0010  var 9.53e-05  E_true/E_pred 1.67
+[15/65] 12675_5.h5     Re  12698 AoA    5  windows 42  uc 0.84 px/frame  |mu| 0.0004  var 1.91e-05  E_true/E_pred 2.46
+[16/65] 16500_0.h5     Re  16534 AoA    0  windows 42  uc 1.15 px/frame  |mu| 0.0005  var 2.49e-05  E_true/E_pred 3.19
+[17/65] 16500_10.h5    Re  16534 AoA   10  windows 42  uc 1.05 px/frame  |mu| 0.0009  var 7.86e-05  E_true/E_pred 1.68
+[18/65] 16500_15.h5    Re  16534 AoA   15  windows 42  uc 0.91 px/frame  |mu| 0.0013  var 1.13e-04  E_true/E_pred 1.67
+[19/65] 16500_20.h5    Re  16534 AoA   20  windows 42  uc 0.85 px/frame  |mu| 0.0013  var 1.49e-04  E_true/E_pred 1.46
+[20/65] 16500_5.h5     Re  16534 AoA    5  windows 42  uc 1.14 px/frame  |mu| 0.0005  var 2.84e-05  E_true/E_pred 2.34
+[21/65] 17775_10.h5    Re  17812 AoA   10  windows 42  uc 1.13 px/frame  |mu| 0.0010  var 1.01e-04  E_true/E_pred 1.73
+[22/65] 17775_15.h5    Re  17812 AoA   15  windows 42  uc 1.02 px/frame  |mu| 0.0013  var 1.41e-04  E_true/E_pred 1.70
+[23/65] 17775_20.h5    Re  17812 AoA   20  windows 42  uc 0.90 px/frame  |mu| 0.0014  var 1.65e-04  E_true/E_pred 1.50
+[24/65] 17775_5.h5     Re  17812 AoA    5  windows 42  uc 1.18 px/frame  |mu| 0.0006  var 3.58e-05  E_true/E_pred 2.68
+[25/65] 19050_10.h5    Re  19090 AoA   10  windows 42  uc 1.19 px/frame  |mu| 0.0012  var 1.22e-04  E_true/E_pred 1.84
+[26/65] 19050_15.h5    Re  19090 AoA   15  windows 42  uc 1.12 px/frame  |mu| 0.0016  var 1.61e-04  E_true/E_pred 1.75
+[27/65] 19050_20.h5    Re  19090 AoA   20  windows 42  uc 0.99 px/frame  |mu| 0.0018  var 2.11e-04  E_true/E_pred 1.59
+[28/65] 19050_5.h5     Re  19090 AoA    5  windows 42  uc 1.23 px/frame  |mu| 0.0006  var 4.52e-05  E_true/E_pred 3.15
+[29/65] 20325_0.h5     Re  20369 AoA    0  windows 42  uc 1.43 px/frame  |mu| 0.0007  var 5.48e-05  E_true/E_pred 4.78
+[30/65] 20325_10.h5    Re  20369 AoA   10  windows 42  uc 1.24 px/frame  |mu| 0.0014  var 1.43e-04  E_true/E_pred 1.97
+[31/65] 20325_15.h5    Re  20369 AoA   15  windows 42  uc 1.16 px/frame  |mu| 0.0018  var 2.05e-04  E_true/E_pred 1.93
+[32/65] 20325_20.h5    Re  20369 AoA   20  windows 42  uc 1.06 px/frame  |mu| 0.0018  var 2.30e-04  E_true/E_pred 1.54
+[33/65] 20325_5.h5     Re  20369 AoA    5  windows 42  uc 1.36 px/frame  |mu| 0.0007  var 5.27e-05  E_true/E_pred 4.68
+[34/65] 21600_0.h5     Re  21647 AoA    0  windows 42  uc 1.50 px/frame  |mu| 0.0011  var 9.41e-05  E_true/E_pred 5.11
+[35/65] 21600_10.h5    Re  21647 AoA   10  windows 42  uc 1.31 px/frame  |mu| 0.0018  var 1.90e-04  E_true/E_pred 1.82
+[36/65] 21600_20.h5    Re  21647 AoA   20  windows 42  uc 1.12 px/frame  |mu| 0.0020  var 2.58e-04  E_true/E_pred 1.54
+[37/65] 22875_0.h5     Re  22926 AoA    0  windows 42  uc 1.60 px/frame  |mu| 0.0006  var 5.66e-05  E_true/E_pred 3.85
+[38/65] 22875_10.h5    Re  22926 AoA   10  windows 42  uc 1.37 px/frame  |mu| 0.0021  var 2.67e-04  E_true/E_pred 1.77
+[39/65] 24150_0.h5     Re  24204 AoA    0  windows 42  uc 1.73 px/frame  |mu| 0.0007  var 6.97e-05  E_true/E_pred 4.39
+[40/65] 24150_10.h5    Re  24204 AoA   10  windows 42  uc 1.46 px/frame  |mu| 0.0024  var 2.89e-04  E_true/E_pred 1.77
+[41/65] 24150_20.h5    Re  24204 AoA   20  windows 13  uc 1.28 px/frame  |mu| 0.0038  var 3.92e-04  E_true/E_pred 1.83
+[42/65] 25425_0.h5     Re  25482 AoA    0  windows 42  uc 1.80 px/frame  |mu| 0.0013  var 1.38e-04  E_true/E_pred 5.72
+[43/65] 25425_10.h5    Re  25482 AoA   10  windows 42  uc 1.54 px/frame  |mu| 0.0025  var 3.58e-04  E_true/E_pred 1.84
+[44/65] 3750_0.h5      Re   3750 AoA    0  windows 42  uc 0.27 px/frame  |mu| 0.0002  var 2.52e-06  E_true/E_pred 1.55
+[45/65] 3750_20.h5     Re   3750 AoA   20  windows 42  uc 0.22 px/frame  |mu| 0.0004  var 1.03e-05  E_true/E_pred 1.92
+[46/65] 3750_5.h5      Re   3750 AoA    5  windows 42  uc 0.26 px/frame  |mu| 0.0002  var 3.34e-06  E_true/E_pred 1.60
+[47/65] 5025_0.h5      Re   5028 AoA    0  windows 42  uc 0.38 px/frame  |mu| 0.0002  var 3.93e-06  E_true/E_pred 1.38
+[48/65] 5025_10.h5     Re   5028 AoA   10  windows 42  uc 0.34 px/frame  |mu| 0.0003  var 1.03e-05  E_true/E_pred 1.94
+[49/65] 5025_15.h5     Re   5028 AoA   15  windows 42  uc 0.31 px/frame  |mu| 0.0004  var 1.44e-05  E_true/E_pred 1.91
+[50/65] 5025_20.h5     Re   5028 AoA   20  windows 42  uc 0.28 px/frame  |mu| 0.0004  var 1.78e-05  E_true/E_pred 1.92
+[51/65] 5025_5.h5      Re   5028 AoA    5  windows 42  uc 0.36 px/frame  |mu| 0.0003  var 6.45e-06  E_true/E_pred 1.58
+[52/65] 6300_0.h5      Re   6306 AoA    0  windows 42  uc 0.46 px/frame  |mu| 0.0003  var 5.19e-06  E_true/E_pred 1.20
+[53/65] 6300_10.h5     Re   6306 AoA   10  windows 42  uc 0.40 px/frame  |mu| 0.0004  var 1.42e-05  E_true/E_pred 1.71
+[54/65] 6300_15.h5     Re   6306 AoA   15  windows 42  uc 0.39 px/frame  |mu| 0.0005  var 2.17e-05  E_true/E_pred 1.85
+[55/65] 6300_20.h5     Re   6306 AoA   20  windows 42  uc 0.35 px/frame  |mu| 0.0005  var 2.75e-05  E_true/E_pred 1.72
+[56/65] 6300_5.h5      Re   6306 AoA    5  windows 42  uc 0.44 px/frame  |mu| 0.0003  var 9.02e-06  E_true/E_pred 1.47
+[57/65] 7575_10.h5     Re   7585 AoA   10  windows 42  uc 0.47 px/frame  |mu| 0.0004  var 1.84e-05  E_true/E_pred 1.60
+[58/65] 7575_15.h5     Re   7585 AoA   15  windows 42  uc 0.44 px/frame  |mu| 0.0005  var 2.77e-05  E_true/E_pred 1.61
+[59/65] 7575_20.h5     Re   7585 AoA   20  windows 42  uc 0.41 px/frame  |mu| 0.0007  var 4.26e-05  E_true/E_pred 1.73
+[60/65] 7575_5.h5      Re   7585 AoA    5  windows 42  uc 0.53 px/frame  |mu| 0.0003  var 9.35e-06  E_true/E_pred 1.60
+[61/65] 8850_0.h5      Re   8863 AoA    0  windows 42  uc 0.63 px/frame  |mu| 0.0003  var 9.39e-06  E_true/E_pred 1.56
+[62/65] 8850_10.h5     Re   8863 AoA   10  windows 42  uc 0.57 px/frame  |mu| 0.0005  var 2.44e-05  E_true/E_pred 1.69
+[63/65] 8850_15.h5     Re   8863 AoA   15  windows 42  uc 0.53 px/frame  |mu| 0.0006  var 3.52e-05  E_true/E_pred 1.76
+[64/65] 8850_20.h5     Re   8863 AoA   20  windows 42  uc 0.47 px/frame  |mu| 0.0007  var 5.55e-05  E_true/E_pred 1.76
+[65/65] 8850_5.h5      Re   8863 AoA    5  windows 42  uc 0.62 px/frame  |mu| 0.0003  var 1.12e-05  E_true/E_pred 1.94
+wrote /export/scratch1/ntm/tmp/fzt/clone/experiments/d2_bundle/foldR_c/prior.npz (12.9 MB, 65 files)

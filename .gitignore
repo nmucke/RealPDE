@@ -1,0 +1,44 @@
+# Public layout: final_submission/ (the package sent to the organizers), experiments/, weights/,
+# docs/, data/README.md. Files that are already tracked stay tracked even where a
+# rule below matches them (e.g. final_submission/logs/, the starting kit's example_data/); these
+# rules only keep NEW untracked files out.
+
+# --- data: never commit the competition release or anything derived from it -------------------
+/data/*
+!/data/README.md
+final_submission/realpde/data/*
+!final_submission/realpde/data/README.md
+
+# --- weights, archives, arrays ---------------------------------------------------------------
+*.h5
+*.pth
+*.pt
+*.ckpt
+*.safetensors
+*.npy
+*.npz
+*.zip
+*.tar.gz
+*.pth.last
+*.pt.last
+# deliberately tracked small files (synthetic kit example data)
+!final_submission/realpde/starting_kit/example_data/**
+# trained weights of the final model (CC BY-NC 4.0, see weights/final_retrain_a100/README.md)
+!weights/**
+
+# --- outputs of the retraining chain run inside final_submission/realpde/ ---------------------
+final_submission/realpde/submissions/retrained_*/
+final_submission/realpde/experiments/**/cache/
+
+# --- packages assembled by experiments/make_package.py ---------------------------------------
+/build/
+
+# --- python / tooling ------------------------------------------------------------------------
+__pycache__/
+*.pyc
+.venv/
+*.egg-info/
+.ipynb_checkpoints/
+wandb/
+tensorboard/
+.DS_Store

@@ -1,0 +1,51 @@
+[load] feat_all81_g0.npz: 882 windows kept, 0 files dropped, aux=True
+[load] feat_all81_g1.npz: 811 windows kept, 0 files dropped, aux=True
+[load] feat_all81_g2.npz: 840 windows kept, 0 files dropped, aux=True
+[load] feat_all81_g3.npz: 808 windows kept, 0 files dropped, aux=True
+[split] 2688 train / 653 val windows (65/16 trajectories); feats: 10 window + 2 lead; target cov5x5; arch m1
+[val ref] sps=52.8477 cov=0.8957  (10s)
+[net] m1 params=22209 dil=(1, 2, 1) hidden=32
+[ep   0] train_huber=0.03409 val_huber=0.03227 *  (17s)
+[ep   1] train_huber=0.03155 val_huber=0.03163 *  (23s)
+[ep   2] train_huber=0.03105 val_huber=0.03107 *  (30s)
+[ep   3] train_huber=0.03071 val_huber=0.03160  (36s)
+[ep   4] train_huber=0.03056 val_huber=0.03080 *  (42s)
+[ep   5] train_huber=0.03042 val_huber=0.03094  (48s)
+[ep   6] train_huber=0.03027 val_huber=0.03077 *  (55s)
+[ep   7] train_huber=0.03014 val_huber=0.03048 *  (61s)
+[ep   8] train_huber=0.03010 val_huber=0.03066  (67s)
+[ep   9] train_huber=0.03001 val_huber=0.03020 *  (74s)
+[ep  10] train_huber=0.02990 val_huber=0.03048  (80s)
+[ep  11] train_huber=0.02988 val_huber=0.03021  (86s)
+[ep  12] train_huber=0.02978 val_huber=0.03007 *  (93s)
+[ep  13] train_huber=0.02974 val_huber=0.03003 *  (99s)
+[ep  14] train_huber=0.02971 val_huber=0.03019  (105s)
+[ep  15] train_huber=0.02966 val_huber=0.02990 *  (112s)
+[ep  16] train_huber=0.02963 val_huber=0.03006  (118s)
+[ep  17] train_huber=0.02957 val_huber=0.02998  (124s)
+[ep  18] train_huber=0.02955 val_huber=0.03011  (131s)
+[ep  19] train_huber=0.02957 val_huber=0.03007  (137s)
+[ep  20] train_huber=0.02950 val_huber=0.03035  (143s)
+[ep  21] train_huber=0.02947 val_huber=0.02982 *  (150s)
+[ep  22] train_huber=0.02944 val_huber=0.03008  (156s)
+[ep  23] train_huber=0.02941 val_huber=0.03001  (162s)
+[ep  24] train_huber=0.02937 val_huber=0.02974 *  (169s)
+[ep  25] train_huber=0.02938 val_huber=0.02975  (175s)
+[ep  26] train_huber=0.02935 val_huber=0.02968 *  (181s)
+[ep  27] train_huber=0.02931 val_huber=0.02986  (188s)
+[ep  28] train_huber=0.02928 val_huber=0.02979  (194s)
+[ep  29] train_huber=0.02929 val_huber=0.02977  (201s)
+[ep  30] train_huber=0.02928 val_huber=0.02986  (207s)
+[ep  31] train_huber=0.02925 val_huber=0.02971  (213s)
+[ep  32] train_huber=0.02922 val_huber=0.02983  (220s)
+[ep  33] train_huber=0.02920 val_huber=0.02976  (226s)
+[ep  34] train_huber=0.02918 val_huber=0.02971  (232s)
+[val grid] sps=53.6874 (ref 52.8477, delta +0.8397) alpha=1.0 lam=1.05 cov=0.8880
+STAGE:2026-09-24 23:25:39 1223566:1223566 ActivityProfilerController.cpp:314] Completed Stage: Warm Up
+STAGE:2026-09-24 23:25:39 1223566:1223566 ActivityProfilerController.cpp:320] Completed Stage: Collection
+STAGE:2026-09-24 23:25:39 1223566:1223566 ActivityProfilerController.cpp:324] Completed Stage: Post Processing
+[cost] {'params': 22209, 'macs_per_window': 1795686400, 'cuda_kernels_per_window': 26, 'eager_ms_per_window': 0.6747309962520376}
+
+[TEST feat_all81_g0] ref sps=52.5580 cov=0.8958 | new sps=53.3975 cov=0.8867 delta=+0.8395
+[test] R^2 vs box5x5 oracle = 0.2826; per-k deltas: k0:+1.06 k1:+0.83 k2:+0.81 k3:+0.89 k4:+0.86 k5:+0.90 k6:+0.89 k7:+0.91 k8:+0.88 k9:+0.89 k10:+0.89 k11:+0.91
+wrote /export/scratch1/ntm/tmp/fzt/clone/data/checkpoints/b1_3090/ship_condwidth_v2/ship_all81_cov5x5_seed2.json

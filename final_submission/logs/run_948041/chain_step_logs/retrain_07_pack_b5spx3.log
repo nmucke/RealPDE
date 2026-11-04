@@ -1,0 +1,1 @@
+wrote data/checkpoints/sp/ship_enrx3_soup4_kes4/model.pth: arch=b5x3_h192_blk6_rf11 members=['b5sp_soup4_s3_all81.pth', 'b5sp_pre1_soup4_s3_all81.pth', 'b5sp_pre2_soup4_s3_all81.pth'] params(total)=10,171,380 size=40.77 MB

@@ -1,0 +1,49 @@
+{
+  "id": "lb0924_k3f_kd3",
+  "group": "lineage",
+  "title": "09-24 upload K3F-KD3",
+  "description": "Packed 3-member ensemble of sim-pretrained b5 SimVP backbones (each a uniform soup of 4 fine-tunes), run in fp16; CB centre blend with per-trajectory weight (AW); per-trajectory width multiplier and energy-blend weight (AX, grid 0.75-0.925); gain clip 20; exact scored mask; KD2 / KD3 kernel diets.",
+  "approximates": {
+    "date": "2026-09-24",
+    "label": "f39128a9",
+    "package": "2026-10-17_simvp-b5spx3-soup4-fp16-cbadapt-ax-gm20-msk-kd3-s3-bundle-condwidth-v2-wholestep-t2-w01-kd",
+    "package_dir": null,
+    "archive_sha256_prefix": "f39128a9",
+    "config_source": null,
+    "leaderboard": {
+      "rel_l2": 94.850321,
+      "tke": 81.050726,
+      "mvpe": 94.391939,
+      "time": 91.603345,
+      "sps": 45.163361,
+      "final": 82.307954
+    }
+  },
+  "off": ["lsk", "kd8", "kd7", "kd6", "lowke", "bvr", "cdio", "ipw", "rec", "kd4", "kd5", "ipc", "br", "cb_w0"],
+  "inference": {
+    "eb_adapt": {
+      "grid": [0.75, 0.85, 0.925],
+      "rho": 0.95
+    }
+  },
+  "training": {
+    "weights": "k3_ke1",
+    "env": {
+      "FREEZE_DEFAULTS": "0"
+    },
+    "arch": "b5x3_h192_blk6_rf11",
+    "dry_run": {
+      "final_submission/realpde": "FATAL: its package source is not in this repository; the lb0925_fze flags build the same weights"
+    },
+    "outputs": {
+      "model.pth, prior.npz, ke_net_flow.pt": "data/checkpoints/sp/ship_enrx3_soup4",
+      "cond_width_weights.pt": "data/checkpoints/b1_3090/ship_condwidth_v2/cond_width_weights.pt"
+    },
+    "note": "the same weight dir as lb0925_fze; only the packaged source differs"
+  },
+  "fidelity": {
+    "with_final_weights": "same code path, different weights",
+    "with_preset_weights": "exact",
+    "why": "Switching off the 09-25 additions (br_adapt None, cb_blend_w0 None, the narrower energy-blend grid) was checked bit-exact against the 09-24 code (development notes, not published). With the final weights the energy net differs."
+  }
+}

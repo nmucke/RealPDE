@@ -1,0 +1,3 @@
+[eval] 811 steps over 20 trajectories, batch size 1
+[lco_run_dump] experiments/d2_bundle/fold0_c on data/real_lco/fold0/heldout: rel_l2_score=94.860 tke_score=80.409 mvpe_score=95.489 time_score=89.523 sps_score=47.293
+[lco_run_dump] wrote /export/scratch1/ntm/tmp/fzt/clone/data/cache/p3_dumps/fold0_c.npz (1365.1 MB)

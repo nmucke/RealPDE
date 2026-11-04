@@ -1,0 +1,26 @@
+{
+  "id": "l13_axe",
+  "group": "ladder",
+  "title": "+ AXE",
+  "description": "Energy-blend grid widened to 0.45-0.925, per-trajectory blend ridge, CB weight 1.0 on window 0.",
+  "approximates": null,
+  "off": ["rec", "lowke", "lsk"],
+  "inference": {},
+  "training": {
+    "weights": "final",
+    "env": {},
+    "arch": "b5x3_h192_blk6_rf11",
+    "dry_run": {
+      "final_submission/realpde": "resolves"
+    },
+    "outputs": {
+      "model.pth, prior.npz, ke_net_flow.pt": "data/checkpoints/sp/ship_enrx3_soup4_kes4",
+      "cond_width_weights.pt": "data/checkpoints/b1_3090/ship_condwidth_v2/cond_width_weights.pt"
+    },
+    "note": "the final weights; nothing to retrain"
+  },
+  "fidelity": {
+    "with_final_weights": "n/a (component ladder on fixed weights, not an upload)",
+    "with_preset_weights": "n/a"
+  }
+}

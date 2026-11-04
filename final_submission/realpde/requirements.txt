@@ -1,0 +1,21 @@
+# Local dev environment, pinned to match the Track 2 eval image
+# (Python 3.10, PyTorch 2.2.2, numpy 1.26 — see docs/track2.md).
+# CPU setup:
+#   uv venv --python 3.10 .venv
+#   uv pip install --python .venv -r requirements.txt \
+#       --extra-index-url https://download.pytorch.org/whl/cpu
+# GPU setup (CUDA 12.1 build; driver >= 530):
+#   uv pip install --python .venv -r requirements.txt \
+#       --extra-index-url https://download.pytorch.org/whl/cu121
+torch==2.2.2
+numpy==1.26.4
+scipy
+pandas
+matplotlib
+h5py
+einops
+scikit-learn
+safetensors
+pyyaml
+requests
+tqdm

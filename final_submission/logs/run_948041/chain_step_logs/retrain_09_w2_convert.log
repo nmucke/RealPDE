@@ -1,0 +1,2 @@
+self-check max|diff| = 3.58e-07; alpha=1.0 lambda=1.05
+wrote /export/scratch1/ntm/tmp/fzt/clone/data/checkpoints/b1_3090/ship_condwidth_v2/cond_width_weights.pt

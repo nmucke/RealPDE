@@ -1,0 +1,32 @@
+{
+  "id": "l16_lsk09",
+  "group": "ladder",
+  "title": "+ LS head correction (forgetting 0.9)",
+  "description": "Online least-squares correction of the backbone output in an 8-dim subspace of the head weights, forgetting factor 0.9 (built as a9acf984 / 7b788569, never uploaded).",
+  "approximates": null,
+  "off": ["lsk_rec_reset"],
+  "inference": {
+    "lsk_head": {
+      "r": 8,
+      "rho": 0.9,
+      "lam": 30.0
+    }
+  },
+  "training": {
+    "weights": "final",
+    "env": {},
+    "arch": "b5x3_h192_blk6_rf11",
+    "dry_run": {
+      "final_submission/realpde": "resolves"
+    },
+    "outputs": {
+      "model.pth, prior.npz, ke_net_flow.pt": "data/checkpoints/sp/ship_enrx3_soup4_kes4",
+      "cond_width_weights.pt": "data/checkpoints/b1_3090/ship_condwidth_v2/cond_width_weights.pt"
+    },
+    "note": "the final weights; nothing to retrain"
+  },
+  "fidelity": {
+    "with_final_weights": "n/a (component ladder on fixed weights, not an upload)",
+    "with_preset_weights": "n/a"
+  }
+}

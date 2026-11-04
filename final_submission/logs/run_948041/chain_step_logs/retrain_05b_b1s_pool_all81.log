@@ -1,0 +1,18 @@
+[all81 g0] heldout 21 files, train 60, ckpt /export/scratch1/ntm/tmp/fzt/clone/data/checkpoints/b1_3090/kfold/n1simvp_s3_all81_g0.pth
+[all81 g1] heldout 20 files, train 61, ckpt /export/scratch1/ntm/tmp/fzt/clone/data/checkpoints/b1_3090/kfold/n1simvp_s3_all81_g1.pth
+[all81 g2] heldout 20 files, train 61, ckpt /export/scratch1/ntm/tmp/fzt/clone/data/checkpoints/b1_3090/kfold/n1simvp_s3_all81_g2.pth
+[all81 g3] heldout 20 files, train 61, ckpt /export/scratch1/ntm/tmp/fzt/clone/data/checkpoints/b1_3090/kfold/n1simvp_s3_all81_g3.pth
+wrote /export/scratch1/ntm/tmp/fzt/clone/experiments/b1_3090/kfold/all81/split.json
+patched experiments/b1_3090/kfold/all81/g0/pipe/submission.py -> model=b5_h192_blk6_rf11 ckpt=/export/scratch1/ntm/tmp/fzt/clone/data/checkpoints/b1_3090/kfold/b5_h192_blk6_rf11_all81_g0.pth
+patched experiments/b1_3090/kfold/all81/g1/pipe/submission.py -> model=b5_h192_blk6_rf11 ckpt=/export/scratch1/ntm/tmp/fzt/clone/data/checkpoints/b1_3090/kfold/b5_h192_blk6_rf11_all81_g1.pth
+patched experiments/b1_3090/kfold/all81/g2/pipe/submission.py -> model=b5_h192_blk6_rf11 ckpt=/export/scratch1/ntm/tmp/fzt/clone/data/checkpoints/b1_3090/kfold/b5_h192_blk6_rf11_all81_g2.pth
+patched experiments/b1_3090/kfold/all81/g3/pipe/submission.py -> model=b5_h192_blk6_rf11 ckpt=/export/scratch1/ntm/tmp/fzt/clone/data/checkpoints/b1_3090/kfold/b5_h192_blk6_rf11_all81_g3.pth
+=== all81 K=4 pool done 2026-09-24T20:19:50Z ===
+cf7ecc416c836660d177a05b6e187b495b16a1346d99895a5b89e65307416ce7  data/checkpoints/b1_3090/kfold/b5_h192_blk6_rf11_all81_g0.pth
+7c998084e456a3acc4827d7246983ab2e6795c4c54d1ebb7a65d01d3d56053bf  experiments/b1_3090/cache/feat_all81_g0.npz
+e3ff6cc2fbc6c064c74d3be8f6689446e9a1430625d295cec0b1fa91157539b6  data/checkpoints/b1_3090/kfold/b5_h192_blk6_rf11_all81_g1.pth
+8c3c665a59653842c934e3bf13a7abace3ac1120217509dd76ec3a554552b1bc  experiments/b1_3090/cache/feat_all81_g1.npz
+df7a2716113aacf64107fed7da65a2b6aa2cef389c1f917c108e03a0116d1e7c  data/checkpoints/b1_3090/kfold/b5_h192_blk6_rf11_all81_g2.pth
+355fdd9656dafe2a519efeff879affc3f3237cee799cddc96d5640f6c0f74b63  experiments/b1_3090/cache/feat_all81_g2.npz
+936094d6631021a353cbf3f5d740c5584d6a5a1c20e45b6266741f90f139cced  data/checkpoints/b1_3090/kfold/b5_h192_blk6_rf11_all81_g3.pth
+9b1345a96485c3ce6878a2f77b8c9f1e6800c39a03047e61405e4cb2ad8df1d3  experiments/b1_3090/cache/feat_all81_g3.npz

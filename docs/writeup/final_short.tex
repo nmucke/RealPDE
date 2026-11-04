@@ -1,0 +1,66 @@
+\documentclass[10pt]{article}
+\usepackage[a4paper,margin=2cm,vmargin=1.6cm]{geometry}
+\usepackage{amsmath,amssymb,booktabs,microtype}
+\usepackage[hidelinks]{hyperref}
+\setlength{\parskip}{3pt}\setlength{\parindent}{0pt}
+
+\title{RealPDE Track~2 (Long-Term Test-Time Adaptation):\\ final submission in brief}
+\author{Team nmucke}
+\date{27 September 2026}
+
+\begin{document}
+\maketitle
+
+\paragraph{Task.} Streaming prediction of real PIV airfoil flow: at each step the model sees 20 frames of
+$(u,v,p)$ on a $32\times64$ grid, returns the next 20 frames plus per-element interval bounds, and then
+receives the true frames. Batch size 1, strict trajectory order, every step timed.
+
+\paragraph{Model (trained offline, only on the released data).}
+\begin{itemize}\itemsep1pt
+\item \textbf{Backbone:} a SimVP-style gated spatiotemporal-attention CNN (3.4\,M parameters) with causal
+  context normalisation (per-pixel running mean/std of all frames revealed so far, fed as extra inputs and used
+  to de-standardise the output). Robust Welsch loss.
+\item \textbf{Sim pretraining} on all 100 simulation files (10k iterations), then \textbf{real fine-tuning} on
+  81 real files (8k iterations).
+\item \textbf{Weight soup:} 4 fine-tunes from the same pretrained snapshot are averaged in weight space.
+\item \textbf{Ensemble:} 3 such soups from 3 different pretrain seeds, packed into one batched network
+  (10.2\,M parameters) with an fp16 core.
+\item \textbf{Auxiliary nets:} a 4-seed energy net (fluctuation amplitude) and an interval-width net fitted on
+  out-of-sample residuals.
+\end{itemize}
+
+\paragraph{Test-time adaptation (causal, gradient-free, per trajectory).}
+\begin{itemize}\itemsep1pt
+\item \textbf{Least-squares correction (LSK):} a ridge regression, updated online from the revealed truth,
+  maps 8 SVD directions of the ensemble's head features to a correction of the $u,v$ output (forgetting factor 0.97).
+\item \textbf{Energy calibration:} the energy net rescales the predicted fluctuations; the blend with the
+  revealed energy history is chosen per trajectory from the previous window's score.
+\item \textbf{Low-energy damping:} fluctuations are shrunk where the prediction's own kinetic energy is low.
+\item \textbf{Intervals:} width = net output $\times$ running error scale $\times$ an adaptive multiplier;
+  centre shifted toward the raw ensemble output by an adaptive weight. Both are chosen per trajectory by
+  scoring a small grid on the previous window with the exact interval-score formula.
+\item \textbf{Regime-change reset:} a detector on the input free-stream velocity restarts the running
+  statistics (including the least-squares moments) after an abrupt change.
+\end{itemize}
+
+\paragraph{Execution.} The whole step (with separate graphs for the first two windows) runs as CUDA graph
+replays with bit-exact bit-tested fallbacks. Work independent of the backbone runs on parallel streams, and
+elementwise chains are fused into runtime-compiled kernels with exact rounding. Outputs are returned by value
+across the harness's process boundary. On the eval harness, a step takes 4.84\,ms.
+
+\paragraph{Result (development leaderboard, 27 Sep 2026).}
+\begin{center}
+\begin{tabular}{cccccc}\toprule
+rel\_l2 & TKE & MVPE & time & SPS & \textbf{final}\\\midrule
+94.939 & 81.017 & 94.500 & 92.464 & 45.211 & \textbf{82.452}\\\bottomrule
+\end{tabular}
+\end{center}
+First on the development-phase leaderboard (Codabench submission 948041). After the organisers retrained the top
+methods for the final evaluation, this submission won Track~2.
+
+\paragraph{Reproducibility.} One command, \texttt{bash scripts/retrain\_all.sh} (run in \texttt{final\_submission/realpde/} of the code
+release), rebuilds the submission
+from the released data in about 2--3\,h on an RTX~3090 or 2\,h\,15 on an A100 with the evaluation software. Seeds
+are fixed and \texttt{train\_real/7575\_0.h5} is excluded throughout.
+
+\end{document}

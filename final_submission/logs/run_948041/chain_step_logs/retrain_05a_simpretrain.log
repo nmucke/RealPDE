@@ -1,0 +1,46 @@
+sim 100 files, 19300 windows (stride 5); load 4.7s
+sim ctx_const {'m_mean': [0.1797771155834198, -0.03318732976913452], 'm_std': [1.2638673782348633, 1.9351425170898438], 'logs_mean': [-1.518404245376587, -0.4219510555267334], 'logs_std': [0.5675583481788635, 1.2761839628219604]} (11.3s)
+model b5_h192_blk6_rf11; random init; params 3,390,460; loss s3
+it    250  train_s3 0.67666  lr 2.09e-04  0.1 min
+it    500  train_s3 0.43116  lr 4.18e-04  0.1 min
+it    750  train_s3 0.34072  lr 5.00e-04  0.2 min
+it   1000  train_s3 0.30971  lr 4.99e-04  0.3 min
+it   1250  train_s3 0.27834  lr 4.99e-04  0.3 min
+it   1500  train_s3 0.27676  lr 4.97e-04  0.4 min
+it   1750  train_s3 0.26873  lr 4.96e-04  0.5 min
+it   2000  train_s3 0.26225  lr 4.94e-04  0.5 min
+it   2250  train_s3 0.25219  lr 4.91e-04  0.6 min
+it   2500  train_s3 0.25049  lr 4.88e-04  0.7 min
+it   2750  train_s3 0.24648  lr 4.85e-04  0.7 min
+it   3000  train_s3 0.24327  lr 4.81e-04  0.8 min
+it   3250  train_s3 0.24018  lr 4.77e-04  0.9 min
+it   3500  train_s3 0.23582  lr 4.73e-04  0.9 min
+it   3750  train_s3 0.23622  lr 4.68e-04  1.0 min
+it   4000  train_s3 0.23565  lr 4.63e-04  1.1 min
+it   4250  train_s3 0.22789  lr 4.58e-04  1.1 min
+it   4500  train_s3 0.23005  lr 4.52e-04  1.2 min
+it   4750  train_s3 0.22715  lr 4.46e-04  1.3 min
+it   5000  train_s3 0.22711  lr 4.39e-04  1.3 min
+it   5250  train_s3 0.22502  lr 4.32e-04  1.4 min
+it   5500  train_s3 0.22637  lr 4.25e-04  1.4 min
+it   5750  train_s3 0.22175  lr 4.18e-04  1.5 min
+it   6000  train_s3 0.21845  lr 4.10e-04  1.6 min
+it   6250  train_s3 0.21571  lr 4.02e-04  1.6 min
+it   6500  train_s3 0.21516  lr 3.94e-04  1.7 min
+it   6750  train_s3 0.21539  lr 3.86e-04  1.8 min
+it   7000  train_s3 0.21979  lr 3.77e-04  1.8 min
+it   7250  train_s3 0.21340  lr 3.69e-04  1.9 min
+it   7500  train_s3 0.21142  lr 3.60e-04  2.0 min
+it   7750  train_s3 0.21078  lr 3.50e-04  2.0 min
+it   8000  train_s3 0.20945  lr 3.41e-04  2.1 min
+it   8250  train_s3 0.20974  lr 3.31e-04  2.2 min
+it   8500  train_s3 0.20631  lr 3.22e-04  2.2 min
+it   8750  train_s3 0.20606  lr 3.12e-04  2.3 min
+it   9000  train_s3 0.20498  lr 3.02e-04  2.4 min
+it   9250  train_s3 0.20231  lr 2.92e-04  2.4 min
+it   9500  train_s3 0.20351  lr 2.82e-04  2.5 min
+it   9750  train_s3 0.19943  lr 2.72e-04  2.6 min
+it  10000  train_s3 0.19931  lr 2.62e-04  2.6 min
+snapshot -> /export/scratch1/ntm/tmp/fzt/clone/data/checkpoints/sp/b5_sim_s3_it10k.pth
+stop-after 10000 reached
+done in 2.6 min

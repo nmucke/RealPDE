@@ -1,0 +1,44 @@
+{
+  "id": "lb0922_n1_w2",
+  "group": "lineage",
+  "title": "09-22 upload n1 + W2 widths",
+  "description": "n1 SimVP backbone trained on all 81 files, prior and energy net, W2 conditional widths, whole-step CUDA graph; convection scan every 4th window.",
+  "approximates": {
+    "date": "2026-09-22",
+    "label": "3919f0a7",
+    "package": "2026-10-03_simvp-s3-bundle-condwidth-v2-wholestep-t2",
+    "package_dir": null,
+    "archive_sha256_prefix": "3919f0a7",
+    "config_source": null,
+    "leaderboard": {
+      "rel_l2": 94.704108,
+      "tke": 80.397982,
+      "mvpe": 94.375714,
+      "time": 91.130797,
+      "sps": 43.938907,
+      "final": 81.828444
+    }
+  },
+  "off": ["lsk", "kd8", "kd7", "kd6", "lowke", "bvr", "cdio", "ipw", "rec", "kd4", "kd5", "ipc", "br", "cb_w0", "kd2", "kd3", "fp16_core", "cb", "aw", "kw", "eb", "gm20", "msk", "scan_warm_only"],
+  "inference": {},
+  "training": {
+    "weights": "n1_w2",
+    "env": {
+      "BACKBONE": "n1"
+    },
+    "arch": "n1_simvp",
+    "dry_run": {
+      "final_submission/realpde": "resolves; its step-10 package source (2026-10-06) is not in this repository, so train_preset.sh runs the weight steps 01-09 only"
+    },
+    "outputs": {
+      "model.pth, prior.npz, ke_net_flow.pt": "data/checkpoints/ship_simvp_s3",
+      "cond_width_weights.pt": "data/checkpoints/ship_condwidth_v2/cond_width_weights.pt"
+    },
+    "note": "the chain packages the n1 backbone with the 2026-10-06 source, not this upload's 2026-10-03 source"
+  },
+  "fidelity": {
+    "with_final_weights": "approximate",
+    "with_preset_weights": "approximate",
+    "why": "Different backbone with the final weights. With n1 weights: the final code runs the width net in fp16 inside the whole-step graph (added 09-23, not bit-exact, no CONFIG flag; this upload used fp32) and adds window-0/1 graphs and a kernel diet (both bit-exact)."
+  }
+}

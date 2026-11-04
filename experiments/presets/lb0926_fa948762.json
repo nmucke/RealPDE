@@ -1,0 +1,46 @@
+{
+  "id": "lb0926_fa948762",
+  "group": "lineage",
+  "title": "09-26 upload (before the LS head and KD8)",
+  "description": "The final package without the online least-squares head correction (LSK, its reset on a regime change, forgetting factor 0.97) and without the KD8 kernel changes.",
+  "approximates": {
+    "date": "2026-09-26",
+    "label": "fa948762",
+    "package_dir": "final_submission/realpde/submissions/2026-10-23_simvp-b5spx3-soup4-fp16-cbadapt-axe-gm20-msk-kd5-kd4-kd6-kd7-rec-ipc-ipw-cdio-bvr-lowke",
+    "archive_sha256_prefix": "fa948762",
+    "config_source": "final_submission/realpde/submissions/2026-10-23_simvp-b5spx3-soup4-fp16-cbadapt-axe-gm20-msk-kd5-kd4-kd6-kd7-rec-ipc-ipw-cdio-bvr-lowke/source",
+    "leaderboard": {
+      "rel_l2": 94.908958,
+      "tke": 81.009206,
+      "mvpe": 94.395393,
+      "time": 92.417334,
+      "sps": 45.196247,
+      "final": 82.41871
+    }
+  },
+  "off": ["lsk", "kd8"],
+  "inference": {},
+  "training": {
+    "weights": "final",
+    "env": {
+      "LSK": "0",
+      "LSKR": "0",
+      "KD8": "0",
+      "LSKR97": "0"
+    },
+    "arch": "b5x3_h192_blk6_rf11",
+    "dry_run": {
+      "final_submission/realpde": "resolves"
+    },
+    "outputs": {
+      "model.pth, prior.npz, ke_net_flow.pt": "data/checkpoints/sp/ship_enrx3_soup4_kes4",
+      "cond_width_weights.pt": "data/checkpoints/b1_3090/ship_condwidth_v2/cond_width_weights.pt"
+    },
+    "note": "the same weights as the final package (the development ledger, not published, records them as byte-identical); these flags only change the packaged source"
+  },
+  "fidelity": {
+    "with_final_weights": "exact",
+    "with_preset_weights": "exact",
+    "why": "With lsk_head None and kd8 False the final code produced the 09-26 package's outputs bit for bit in the checks run when the two were added (development notes, not published). Same weights."
+  }
+}

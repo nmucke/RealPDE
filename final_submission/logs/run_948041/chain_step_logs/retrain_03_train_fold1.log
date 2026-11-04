@@ -1,0 +1,38 @@
+short trajectories (padded, sampled only where valid): 10125_0:607, 21600_5:492, 24150_20:282
+train 61 files, 9882 windows (start stride 5)
+ctx_const {'m_mean': [0.007728207856416702, 0.004616742022335529], 'm_std': [1.1491649150848389, 0.7103999257087708], 'logs_mean': [-1.7678241729736328, -1.3284552097320557], 'logs_std': [0.3254139721393585, 0.7926926612854004]} (prefix-sum + pooling: 6.7s)
+model n1_simvp; random init; params 7,111,868; loss s3
+it    250  train_s3 0.38906  lr 5.00e-04  0.2 min
+it    500  train_s3 0.30716  lr 4.99e-04  0.4 min
+it    750  train_s3 0.27423  lr 4.95e-04  0.7 min
+it   1000  train_s3 0.25713  lr 4.88e-04  1.0 min
+it   1250  train_s3 0.24982  lr 4.79e-04  1.2 min
+it   1500  train_s3 0.24845  lr 4.68e-04  1.5 min
+it   1750  train_s3 0.23816  lr 4.55e-04  1.8 min
+it   2000  train_s3 0.23605  lr 4.39e-04  2.0 min
+it   2250  train_s3 0.23233  lr 4.22e-04  2.3 min
+it   2500  train_s3 0.22950  lr 4.02e-04  2.5 min
+it   2750  train_s3 0.22617  lr 3.82e-04  2.8 min
+it   3000  train_s3 0.22278  lr 3.60e-04  3.1 min
+it   3250  train_s3 0.22291  lr 3.36e-04  3.3 min
+it   3500  train_s3 0.21696  lr 3.12e-04  3.6 min
+it   3750  train_s3 0.22391  lr 2.87e-04  3.8 min
+it   4000  train_s3 0.21646  lr 2.62e-04  4.1 min
+it   4250  train_s3 0.22178  lr 2.37e-04  4.4 min
+it   4500  train_s3 0.21412  lr 2.12e-04  4.6 min
+it   4750  train_s3 0.21515  lr 1.87e-04  4.9 min
+it   5000  train_s3 0.21643  lr 1.63e-04  5.2 min
+it   5250  train_s3 0.20906  lr 1.40e-04  5.4 min
+it   5500  train_s3 0.20990  lr 1.17e-04  5.7 min
+it   5750  train_s3 0.21140  lr 9.67e-05  5.9 min
+it   6000  train_s3 0.20960  lr 7.76e-05  6.2 min
+it   6250  train_s3 0.20779  lr 6.02e-05  6.5 min
+it   6500  train_s3 0.20928  lr 4.47e-05  6.7 min
+it   6750  train_s3 0.20784  lr 3.13e-05  7.0 min
+it   7000  train_s3 0.21007  lr 2.02e-05  7.2 min
+it   7250  train_s3 0.21033  lr 1.14e-05  7.5 min
+it   7500  train_s3 0.20260  lr 5.10e-06  7.8 min
+it   7750  train_s3 0.20628  lr 1.28e-06  8.0 min
+it   8000  train_s3 0.20762  lr 0.00e+00  8.3 min
+peak GPU: 1.71 GiB allocated
+done in 8.3 min -> /export/scratch1/ntm/tmp/fzt/clone/data/checkpoints/d2/n1simvp_s3_fold1.pth

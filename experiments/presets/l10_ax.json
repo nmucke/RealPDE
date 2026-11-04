@@ -1,0 +1,31 @@
+{
+  "id": "l10_ax",
+  "group": "ladder",
+  "title": "+ per-trajectory widths and energy blend",
+  "description": "Per-trajectory interval-width multiplier per lead group and energy-blend weight (AX, grid 0.75-0.925).",
+  "approximates": null,
+  "off": ["cb_w0", "br", "gm20", "msk", "rec", "lowke", "lsk"],
+  "inference": {
+    "eb_adapt": {
+      "grid": [0.75, 0.85, 0.925],
+      "rho": 0.95
+    }
+  },
+  "training": {
+    "weights": "final",
+    "env": {},
+    "arch": "b5x3_h192_blk6_rf11",
+    "dry_run": {
+      "final_submission/realpde": "resolves"
+    },
+    "outputs": {
+      "model.pth, prior.npz, ke_net_flow.pt": "data/checkpoints/sp/ship_enrx3_soup4_kes4",
+      "cond_width_weights.pt": "data/checkpoints/b1_3090/ship_condwidth_v2/cond_width_weights.pt"
+    },
+    "note": "the final weights; nothing to retrain"
+  },
+  "fidelity": {
+    "with_final_weights": "n/a (component ladder on fixed weights, not an upload)",
+    "with_preset_weights": "n/a"
+  }
+}

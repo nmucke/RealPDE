@@ -1,0 +1,352 @@
+\documentclass[10pt]{article}
+\usepackage[a4paper,margin=2.2cm]{geometry}
+\usepackage{amsmath,amssymb,booktabs,microtype,enumitem,array}
+\usepackage[hidelinks]{hyperref}
+\setlist{itemsep=2pt,topsep=3pt}
+\setlength{\parskip}{4pt}\setlength{\parindent}{0pt}
+\newcommand{\cfg}[1]{\texttt{#1}}
+
+\title{RealPDE Track~2 (Long-Term Test-Time Adaptation):\\ the final submission in detail}
+\author{Team nmucke}
+\date{27 September 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This document describes the final submission (Codabench submission 948041, archive \texttt{f11d2c1d}). It scored
+82.452, first on the Track~2 development-phase leaderboard, and won Track~2 after the organisers' final evaluation,
+in which they retrained the top methods. The model is a packed ensemble of three sim-pretrained, real-fine-tuned and weight-souped SimVP-style networks,
+wrapped in a causal, gradient-free test-time pipeline. The pipeline has several parts: context normalisation,
+a per-trajectory online least-squares correction of the ensemble head, calibration of the fluctuation energy,
+damping of low-energy fluctuations, interval bounds chosen per trajectory to maximise the interval score, and a
+detector that resets the running statistics after an abrupt regime change. The whole step runs as CUDA graph
+replays scheduled over several GPU streams, using kernels that are bit-exact to the unfused computation. The
+submission is rebuilt from the released data by one command.
+\end{abstract}
+
+\tableofcontents
+
+%======================================================================
+\section{Task and scoring}
+
+Each hidden trajectory of real PIV measurements behind a NACA4418 airfoil (angle of attack
+$0$--$20^\circ$, Reynolds number $3\,000$--$28\,000$) is revealed window by window. At step $t$ the model
+receives the normalised input window $x_t\in\mathbb{R}^{1\times20\times32\times64\times3}$ (channels
+$u,v,p$; $p$ is zero and unscored on real data) and the ground truth $y_{t-1}$ of the previous step. It returns
+a prediction $\hat y_t$ and, optionally, per-element bounds $[\ell_t,h_t]$. The input and target windows
+overlap in stride~20, so window $k$'s target is window $k{+}1$'s input. Everything inside
+\cfg{ttt\_step} and \cfg{reset\_ttt\_state} is timed.
+
+Five subscores are combined into the final score; the combination is not published. Our fit to the board is
+$\approx 0.48\,\text{rel}_{L2} + 0.07\,\text{TKE} + 0.10\,\text{MVPE} + 0.09\,\text{time} + 0.28\,\text{SPS}$.
+The Safe Prediction Score is computed per element as
+\begin{equation}
+  \text{elem}=\bigl[0.5(1-p_{\text{dm}})+0.3(1-p_{\text{tke}})+0.2(1-p_{\text{mvpe}})\bigr]\,
+  e^{-(h-\ell)/\sigma_g}\,\mathbb{1}[\ell\le y\le h],\qquad p_x=\frac{e_x}{0.5+e_x},
+\end{equation}
+where $e_x$ are the per-window relative errors of the prediction. The per-window TKE error therefore enters
+both the TKE subscore and the SPS accuracy factor. The time subscore is $100/(1+\sqrt{t/0.72896\,\text{s}})$.
+
+%======================================================================
+\section{Data}
+
+Only the released \cfg{train\_sim} (100 simulation files) and \cfg{train\_real} (82 files) are used; no
+external data or pretrained weights. \cfg{train\_real/7575\_0.h5} duplicates another file (organizer
+announcement) and is excluded at every stage, which leaves 81 real files. Simulation data are subsampled to
+the real $32\times64$ grid and rescaled to physical units, and $p$ is masked, so that pretraining sees exactly the
+real input layout. The backbone uses no augmentation; the energy-net fits use an on-the-fly flip in $y$.
+
+Development decisions used leave-conditions-out (LCO) folds that hold out whole angle-of-attack / Reynolds
+regimes:
+\begin{itemize}
+\item \textbf{fold1:} used for selection.
+\item \textbf{fold0:} the primary held-out fold.
+\item \textbf{foldR:} held-out Reynolds numbers.
+\item \textbf{Rx:} Reynolds extrapolation.
+\item \textbf{foldS-lo, foldS-hi:} simulation-only regimes, as beyond-range surrogates.
+\item \textbf{27 stress sets:} regime switches, velocity scaling, PIV dropout, noise, long trajectories and others.
+\end{itemize}
+The private test contains unseen parameter regimes, so every component below also had to be non-negative on
+the private-regime proxies (foldR, Rx and the foldS sets).
+
+%======================================================================
+\section{Backbone and training}
+
+\subsection{Architecture}
+The backbone is a SimVP-style network with gated spatiotemporal-attention blocks
+(\cfg{b5\_h192\_blk6\_rf11}): encoder width 128, hidden width 192, 6 gSTA blocks and receptive field 11,
+3.39\,M parameters in total.
+
+\subsection{Causal context normalisation}
+The backbone is wrapped in causal context normalisation, which is the core test-time adaptation. For each
+trajectory the wrapper keeps a per-pixel running mean and standard deviation of every frame revealed so far:
+input frames and previously revealed targets, never the current target. These two maps are fed to the network
+as extra channels, and the network's output is de-standardised with them. This adapts the operating point to
+the trajectory's own regime with no gradient step. The state is cleared in \cfg{reset\_ttt\_state}.
+
+\subsection{Loss}
+The loss is a bounded Welsch (correntropy) loss, mixed 75/25 between physical and per-channel-standardised
+space, with normalisers fixed from the first batch of each training stage.
+
+\subsection{Training stages}
+\begin{enumerate}
+\item \textbf{Sim pretraining.} All 100 simulation files. AdamW, learning rate $5\cdot10^{-4}$, no weight decay,
+  batch size 8, 3\,\% warmup and then cosine decay over a 20k-iteration schedule. The run is snapshotted at
+  iteration 10k, a length selected on fold1.
+\item \textbf{Real fine-tuning.} 8k iterations on the 81 real files with the same optimiser, starting from the
+  sim snapshot.
+\item \textbf{Weight soup.} Four fine-tunes (seeds 0--3) from the same snapshot are averaged uniformly in weight
+  space (computed in fp64, cast to fp32). Because the members share one loss basin, the soup is better than any
+  single member at no extra inference cost.
+\item \textbf{Ensemble ($K=3$).} Stages 1--3 are repeated with sim-pretrain seeds 0, 1 and 2. Diversity comes
+  from the pretrain seed; souping across seeds is invalid because the members are in different basins. The three
+  soups are packed into one batched network (10.2\,M parameters): stem concatenation, grouped convolutions and
+  batched $1{\times}1$ convolutions. The output is the members' mean in standardised space.
+\item \textbf{fp16 core.} Everything inside the packed backbone runs in half precision; the surrounding
+  pipeline stays fp32. The observed headroom to fp16 overflow is at least $1\,800\times$, and the composite
+  changes by at most $|\Delta|\le0.0002$.
+\end{enumerate}
+
+\subsection{Fitted auxiliaries}
+\begin{itemize}
+\item \textbf{Prior:} a small per-condition seed that stabilises the first windows, with decaying influence.
+\item \textbf{Energy net (``KE3''):} four energy nets (seeds 0--3) predict the fluctuation energy of the coming
+  window from causal features. Their mean is written exactly as one dense network of $4\times$ width
+  (block-diagonal weights; fp64 check $\le5\cdot10^{-9}$), so it runs as a single net on tensor cores.
+\item \textbf{Interval-width net (``W2''):} a small CNN that predicts the log-ratio of the local error scale to the
+  pipeline's running error scale. Its inputs are causal features, the lead index and the previous window's error
+  map (EMA). It is fitted only on out-of-sample residuals from 4-group cross-fitting over the 81 files.
+\end{itemize}
+
+%======================================================================
+\section{The online pipeline (per step, all causal)}
+
+Every quantity below uses only $x_t$, the revealed $y_{<t}$ and fixed constants. Grids, thresholds and
+constants are literals in \cfg{submission.py}; the retrain chain fits none of them. The stages run in the order
+listed.
+
+\subsection{Regime-change detector (REC)}
+The detector computes $d=|\log(\bar U_{\text{win}}/\bar U_{\text{run}})|$ from the mean physical $u$ of the
+current input frames and the running mean since the last reset. If $d>\log1.5$, the context-normalisation
+accumulator, the error, centre and blend moments, and the least-squares moments of
+Section~\ref{sec:lsk} restart. Mean-type statistics are rescaled by
+$\bar U_{\text{win}}/\bar U_{\text{run}}$ and given a pseudo-count of 6.
+
+On all 81 real files the statistic stays below 0.085, so the detector never fires and REC is bit-identical to
+its absence on normal streams. On synthetic regime-switch streams it recovers within 0--2 windows.
+
+\subsection{Online least-squares correction of the ensemble head (LSK)}\label{sec:lsk}
+The packed head computes $\frac1K\sum_k (W_kh_k+b_k)=W_{\text{cat}}H$ with
+$W_{\text{cat}}=[W_1\dots W_K]/K$. Let $V$ hold the top-8 right singular vectors of the $u,v$ rows of
+$W_{\text{cat}}$; they are computed at model construction from the trained weights, so no extra fit is needed.
+The feature vector is $\phi=[V^\top H;1]$, and $s$ is the causal context standard deviation. For each channel,
+from the revealed error $e=y_{t-1}-\hat y^{\text{raw}}_{t-1}$:
+\begin{align}
+  \Phi&\leftarrow\rho\Phi+\textstyle\sum s^2\phi\phi^\top, &
+  B&\leftarrow\rho B+e\,(s\phi)^\top, &
+  M&=B(\Phi+\lambda I)^{-1},
+\end{align}
+with $\rho=0.97$ and $\lambda=30\,\mathrm{tr}(\Phi_1)/9$ (fixed from the first revealed window). The raw $u,v$
+output of all 20 leads is then corrected by $(M\phi)s$ before any downstream stage.
+
+The moments are held in fp64 and the $9\times9$ solve uses \cfg{solve\_ex} with no host synchronisation. A
+non-finite guard skips bad pairs. The moment update runs on a side GPU stream, so only one GEMM and the apply
+sit on the step's critical path. A build-time self-test uses the configured $\rho$ and falls back to ``LSK off''
+on any mismatch. REC multiplies the moments by its keep factor.
+
+\subsection{Energy calibration}
+The predicted fluctuation amplitude is rescaled so that its energy matches a blend of the energy-net prediction
+and the running mean of revealed energy. The rescale adds the mean back so that variance is preserved, and the
+gain is clamped to $[1/20,\,20]$.
+
+The blend weight $b\in\{0.45,0.60,0.75,0.85,0.925\}$ is chosen per trajectory. Every candidate is computed each
+step, batched, and the one with the best EMA ($\rho=0.95$) of the previous window's official composite is
+emitted. Before any evidence exists, $b=0.85$.
+
+\subsection{Prior and advection blend}
+The prediction is blended with an advected copy of the most recently revealed frame. The ridge strength of this
+blend's least-squares fit is chosen per trajectory from $\{0.125,0.25,0.5,1\}$ by the same previous-window-score
+rule.
+
+\subsection{Low-energy fluctuation damping (LOWKE)}
+Let $m_t$ be the 20-frame mean of the prediction and $K_p=\tfrac12(\mathrm{var}_t u+\mathrm{var}_t v)$ its
+energy map. For windows $\ge2$,
+\begin{equation}
+  g=\mathrm{clamp}\!\Bigl(\bigl(K_p/(1.5\,\overline{K_p})\bigr)^{0.25},0,1\Bigr),\qquad
+  \hat y\leftarrow m_t+g\,(\hat y-m_t).
+\end{equation}
+This removes weakly correlated fluctuations where the model itself predicts calm flow. rel$_{L2}$ and SPS rise
+and TKE drops slightly. The bounds and internal state are untouched.
+
+\subsection{Interval bounds}
+\begin{itemize}
+\item \textbf{Width:} the W2 half-width, multiplied by the running error scale and by an adaptive multiplier
+  $\kappa\in\{0.85,0.925,1,1.075,1.15\}$. $\kappa$ is chosen separately for leads 1--2 and leads 3--20 by the EMA
+  of the exact SPS element score on the previous window.
+\item \textbf{Centre:} the centre is shifted toward the raw ensemble output,
+  $c'=c+w(\hat y^{\text{raw}}-c)$. The weight $w\in\{0.30,0.45,0.60,0.75,0.90\}$ is chosen per trajectory by the
+  same rule. The fallback is $w=0.75$, and window~0 uses $w=1$.
+\item \textbf{Scored mask:} the per-lead error maps use the scorer's exact scored mask,
+  $|y|>10^{-6}$ on the normalised target.
+\end{itemize}
+Bounds are returned on every step of every run, as the all-or-nothing rule requires.
+
+\subsection{Causality summary}
+\begin{center}\small
+\begin{tabular}{@{}p{5.2cm}p{9.8cm}@{}}\toprule
+Stage & Information used \\\midrule
+Context normalisation, REC & frames revealed up to $t-1$; the current step's input frames\\
+LSK & revealed errors up to $t-1$; the current step's own head features\\
+Energy / blend / ridge / $\kappa$ / $w$ selectors & scores of previous windows only (EMA)\\
+Prior, W2, energy nets & fixed after training (training files only)\\
+Current target $y_t$ & never used for step $t$\\\bottomrule
+\end{tabular}
+\end{center}
+
+%======================================================================
+\section{Execution}
+
+\subsection{CUDA graphs and fallbacks}
+From window 2 onward the entire step is one CUDA-graph replay. Windows 0 and 1 have their own captured graphs,
+and every graph has a bit-exact eager fallback. Each graph is self-tested against eager execution at model
+construction, and any failure degrades gracefully. An RNG probe guards against capture-time corruption of the
+CUDA random state.
+
+\subsection{Kernel diets}
+All diets preserve outputs exactly, except KD5, which changes rounding order only
+($|\Delta\text{composite}|\le0.0004$).
+\begin{itemize}
+\item \textbf{Fused selectors:} the candidate scoring is fused into fewer kernels.
+\item \textbf{Leaner step body:} the backbone and ``mega'' stage are rewritten with fewer kernels.
+\item \textbf{KD5:} near-exact convolution rewrites.
+\item \textbf{First-two-window graphs:} windows 0 and 1 are captured with a side stream and private memory pools.
+\end{itemize}
+
+\subsection{Multi-stream schedule}
+The step graph is captured with fork/join edges. Work that does not depend on the backbone output (error and
+loss bookkeeping, running variances, width-net updates, adaptive selectors, input-only preparation) runs on
+parallel streams alongside the backbone. The LSK update and the LOWKE gain also have their own streams. Every
+cross-stream read-after-write and write-after-read hazard is ordered by an event.
+
+This was verified in three ways: a race checker using transitive happens-before (0 conflicts); replays with
+deliberate delays that invert each fork/join completion order; and runs under foreign GPU load and different
+connection limits. All comparisons matched bit for bit.
+
+\subsection{Fused elementwise kernels}
+The longest elementwise chains on the critical path are fused into \cfg{torch.cuda.jiterator} kernels. They are
+written with round-to-nearest intrinsics (\cfg{\_\_fmul\_rn}, \cfg{\_\_fadd\_rn}, \dots) so that NVRTC cannot
+contract them into fused multiply-adds, which keeps them bit-identical to the unfused graph. They are compiled
+and bit-tested at construction, outside the timed region; any failure falls back.
+
+\subsection{Transport across the harness process boundary}
+The official harness runs the model in a worker subprocess.
+\begin{itemize}
+\item \textbf{By-value outputs (BVR):} outputs are returned as a zero-copy tensor subclass whose pickled form is
+  its values, so the parent receives ordinary tensors with identical values. This proved decisive on the board.
+\item \textbf{Other transport paths:} fd-shared single-storage outputs, a listener warm-up during construction
+  (untimed), and direct CUDA I/O cover the other possible harness designs. They are inert where they do not
+  apply.
+\end{itemize}
+
+\subsection{Resulting speed}
+The eval harness reports 4.84\,ms per step. Of that, about 2.6\,ms is our GPU work on the A800-class device;
+the rest is harness transport.
+
+%======================================================================
+\section{Validation evidence for each component}
+
+Each component was adopted under a gate declared in advance: selection on fold1, then a single held-out
+evaluation on fold0, foldR, Rx and the foldS sets. Most were also reviewed by an independent Fable reviewer and
+verified on the exact archive: bit-identity checks, out-of-process harness emulation, fuzzing, reset probes and
+determinism.
+
+The table lists the change in the local composite (time held fixed) at the moment each component was added to
+the stack of that time. It therefore shows increments, not a clean ablation of the final stack. Board transfer
+is about $0.6\times$ fold0.
+
+\begin{center}\small
+\begin{tabular}{@{}lrrrrrr@{}}\toprule
+Component & fold1 & fold0 & foldR & Rx & foldS-lo & foldS-hi\\\midrule
+Sim pretraining            & +0.105 & +0.184 & +0.064 & +0.177 & +0.186 & $-$0.181\\
+Soup of 4                  & +0.022 & +0.075 & +0.048 & +0.041 & +0.024 & $-$0.001\\
+2nd ensemble member        & +0.080 & +0.091 & +0.082$^a$ & +0.060$^a$ & +0.073$^a$ & +0.084$^a$\\
+3rd member + fp16 core     & +0.048 & +0.039 & -- & -- & +0.026 & $-$0.015\\
+Centre blend               & +0.110 & +0.089 & +0.114 & -- & -- & --\\
+Adaptive centre weight     & +0.001 & +0.001 & -- & -- & +0.002 & +0.055\\
+Adaptive width / energy blend & +0.017 & +0.027 & +0.011 & -- & +0.024 & +0.046\\
+Gain clamp 20              & +0.006 & +0.008 & +0.031 & +0.019 & $-$0.004 & +0.000\\
+Exact scored mask          & +0.003 & +0.005 & +0.004 & +0.009 & $-$0.001 & +0.005\\
+Beyond-range hedge (AXE)   & +0.000 & +0.009 & -- & -- & +0.009 & +0.235\\
+4-seed energy net (KE3)    & +0.018 & +0.043 & +0.020 & -- & +0.057 & +0.115\\
+LOWKE (net of time)        & +0.022 & +0.033 & +0.021 & -- & +0.037 & +0.035\\
+LSK ($\lambda_{\text{rel}}=30$)& +0.018 & +0.041 & +0.027 & +0.034 & -- & --\\
+LSK $\rho$ 0.9$\to$0.97$^b$ & +0.004 & +0.010 & +0.005 & +0.007 & +0.008 & +0.033\\\bottomrule
+\end{tabular}
+\end{center}
+{\footnotesize $^a$ measured on an independent 4090 build.
+$^b$ Missed the fold0 bar of +0.015 declared in advance. It was adopted as a disclosed override because it was
+non-negative on every held-out and private-proxy set, and because an independent refit on the 4090 reproduced
+it (fold0 +0.009, 5/5 sets $\ge0$).}
+
+Notes on the table:
+\begin{itemize}
+\item REC is bit-identical on every normal stream and gains +17--22 composite on a regime-switch file.
+\item Resetting the LS moments on REC is bit-identical off-switch and gains +0.036 on the switch set.
+\item The timing layers are output-identical except KD5 (rounding order only). On a 3090 they save:
+  fused selectors $-0.11$\,ms, leaner step body $-0.11$\,ms, KD5 $-0.115$\,ms, first-two-window graphs
+  $-0.05$\,ms, multi-stream schedule $-0.42$\,ms ($-0.50$\,ms on an A100), fused kernels $-0.12$\,ms and the
+  final critical-path cuts $-0.07$\,ms.
+\item By-value transport saves about 0.7\,ms per step on the board.
+\end{itemize}
+
+In a 27-set stress battery with unseen-regime surrogates, the pipeline beat the best trivial predictor on every
+set, with no exceptions and no non-finite outputs.
+
+%======================================================================
+\section{Result}
+
+\begin{center}
+\begin{tabular}{lcccccc}\toprule
+& rel\_l2 & TKE & MVPE & time & SPS & final\\\midrule
+Development leaderboard, 27 Sep 2026 & 94.939 & 81.017 & 94.500 & 92.464 & 45.211 & \textbf{82.452}\\\bottomrule
+\end{tabular}
+\end{center}
+The pre-registered prediction was $82.455$ ($82.40$--$82.51$). The time subscore corresponds to 4.84\,ms per step.
+This was first on the development-phase leaderboard (Codabench submission 948041). In the organisers' final
+evaluation, for which they retrained the top methods, this submission won Track~2.
+
+%======================================================================
+\section{Reproducibility and environment}
+
+\begin{itemize}
+\item \textbf{One command:} \cfg{bash scripts/retrain\_all.sh}, run in \cfg{final\_submission/realpde/} of the
+  code release, rebuilds \cfg{submission.zip} from the released
+  data. The chain has 13 idempotent steps and uses seed 0 throughout.
+\item \textbf{Wall time:} about 2--3\,h on an RTX~3090 (2\,h\,47 measured from a fresh clone), about 1\,h on an RTX~4090 and about 2\,h\,15 on an A100 with the evaluation software
+  versions. A from-scratch A100 retrain scored within $\pm0.03$ of our build on every local subscore.
+\item \textbf{What is reproduced exactly:} code entries are byte-identical, and on the same GPU so are
+  \cfg{model.pth} and \cfg{prior.npz}. Under GPU contention the sim-pretraining snapshot can differ bitwise, so
+  the correctness bar is score parity, not byte identity.
+\item \textbf{Runtime:} Python~3.10, PyTorch~2.2.2 (CUDA 12.1), numpy~1.26. The NVRTC shipped with torch is
+  needed for the fused kernels, which fall back if it is missing. Inference is offline and reads nothing from disk
+  beyond the archive; the extracted archive is about 60\,MB.
+\item \textbf{Robustness of the chain:} an opt-in serial mode supports clusters that allow one process per GPU.
+  Reused artefacts are validated before a step is skipped. An open-file audit confirmed that only the released
+  training data are read.
+\end{itemize}
+
+%======================================================================
+\section{Limitations}
+\begin{itemize}
+\item TKE and the remaining SPS gap are limited by the backbone's forecast correlation at late leads and high
+  Reynolds numbers. Output-side corrections tested on top of the final stack (spectral, temporal and physical
+  projections; phase warps; per-trajectory reduced models) did not improve it.
+\item The highest-Reynolds 0$^\circ$ files remain the weakest regime: LSK is slightly negative on a few of
+  them.
+\item Synthetic bursts of all-zero frames degrade the LS correction. No released real frame has this property.
+\item Timing levers that depend on the harness were validated on emulations and on the board; the exact private
+  harness is not public.
+\end{itemize}
+
+\end{document}

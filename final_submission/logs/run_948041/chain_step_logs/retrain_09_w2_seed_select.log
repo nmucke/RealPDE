@@ -1,0 +1,5 @@
+  seed 0: val_delta=0.9986
+  seed 1: val_delta=0.9534
+  seed 2: val_delta=0.8397
+best-of-3: seed 0 (val_delta=0.9986), picked on its OWN val line
+0

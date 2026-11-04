@@ -1,0 +1,27 @@
+{
+  "id": "t00_no_exec_levers",
+  "group": "time",
+  "title": "final without execution-only levers",
+  "description": "The final package with KD2, KD4, KD5, KD6 (with KD7 / KD8), IPC, IPW, BVR and CDIO off. KD3 stays on because REC needs it. KD3 on with KD2 off was never packaged by the chain, so this combination is unverified; a run fails if REC or KD3 is not active on the GPU. Outputs should equal the final package's except for KD5's fp16 rounding-order differences.",
+  "approximates": null,
+  "off": ["kd2", "kd4", "kd5", "kd6", "ipc", "ipw", "bvr", "cdio"],
+  "inference": {},
+  "expect_active": ["rec", "kd3"],
+  "training": {
+    "weights": "final",
+    "env": {},
+    "arch": "b5x3_h192_blk6_rf11",
+    "dry_run": {
+      "final_submission/realpde": "resolves"
+    },
+    "outputs": {
+      "model.pth, prior.npz, ke_net_flow.pt": "data/checkpoints/sp/ship_enrx3_soup4_kes4",
+      "cond_width_weights.pt": "data/checkpoints/b1_3090/ship_condwidth_v2/cond_width_weights.pt"
+    },
+    "note": "the final weights; nothing to retrain"
+  },
+  "fidelity": {
+    "with_final_weights": "n/a (execution ablation, not an upload; unverified combination)",
+    "with_preset_weights": "n/a"
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "id": "lb0923_b5sp",
+  "group": "lineage",
+  "title": "09-23 upload SP-b5",
+  "description": "One sim-pretrained b5 SimVP backbone in fp32, prior and energy net refitted, conditional widths (W2 fit). Execution changes of that day: window-0/1 CUDA graphs, kernel diet, fp16 width net in the whole-step graph, convection scan on windows 0-1 only. No CB or per-trajectory choices.",
+  "approximates": {
+    "date": "2026-09-23",
+    "label": "74f9d98f",
+    "package": "2026-10-08_simvp-b5sp-s3-bundle-condwidth-v2-wholestep-t2-w01-kd",
+    "package_dir": null,
+    "archive_sha256_prefix": "74f9d98f",
+    "config_source": null,
+    "leaderboard": {
+      "rel_l2": 94.77804,
+      "tke": 80.71616,
+      "mvpe": 94.336535,
+      "time": 91.431588,
+      "sps": 44.260186,
+      "final": 81.999142
+    },
+    "note": "weights-only swap on the 2026-10-06 source"
+  },
+  "off": ["lsk", "kd8", "kd7", "kd6", "lowke", "bvr", "cdio", "ipw", "rec", "kd4", "kd5", "ipc", "br", "cb_w0", "kd2", "kd3", "fp16_core", "cb", "aw", "kw", "eb", "gm20", "msk"],
+  "inference": {},
+  "training": {
+    "weights": "b5sp",
+    "env": {
+      "BACKBONE": "b5sp"
+    },
+    "arch": "b5_h192_blk6_rf11",
+    "dry_run": {
+      "final_submission/realpde": "resolves; its step-10 package source (2026-10-06) is not in this repository, so train_preset.sh runs the weight steps 01-09 only"
+    },
+    "outputs": {
+      "model.pth, prior.npz, ke_net_flow.pt": "data/checkpoints/sp/ship",
+      "cond_width_weights.pt": "data/checkpoints/b1_3090/ship_condwidth_v2/cond_width_weights.pt"
+    }
+  },
+  "fidelity": {
+    "with_final_weights": "approximate",
+    "with_preset_weights": "same code path, different weights",
+    "why": "With the final weights this runs the 3-member ensemble in TF32 instead of one fp32 backbone. With b5sp weights the CONFIG equals the 2026-10-06 source's; the weights are a retrain."
+  }
+}

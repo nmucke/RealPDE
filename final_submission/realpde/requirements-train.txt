@@ -1,0 +1,31 @@
+# requirements-train.txt -- TRAINING environment for scripts/retrain_all.sh
+# (NOT the evaluation-image pin -- that stays Python 3.10 / torch 2.2.2 /
+# numpy 1.26 exactly, per CLAUDE.md, and is a strict SUBSET of this file).
+#
+# Generated (not hand-written) by exact-version export from this repo's own
+# `.venv`, restricted to the import closure of the 16 scripts
+# scripts/retrain_all.sh + its FINAL smoke-test step actually invoke,
+# resolved transitively through every local module they import
+# (experiments/r1c_finalize/scripts/r1c_import_closure.py; raw result:
+# experiments/r1c_finalize/import_closure.json). Vendored local packages
+# (src/rpde_baselines/, package_src/simvp_pkg/, package_src/{v8,v9}/) are
+# tracked as plain files, not pip installs, and are NOT listed here.
+#
+# Interpreter: Python 3.10.19 (`.venv/bin/python --version`).
+# GPU used to produce/rehearse every archive to date: NVIDIA RTX 3090,
+# driver 560.28.03. torch is a CUDA 12.1 wheel (`+cu121` local version tag);
+# install it from PyTorch's own cu121 index, not plain PyPI, or you will
+# silently get a CPU-only build:
+#   pip install torch==2.2.2 --index-url https://download.pytorch.org/whl/cu121
+# then the rest of this file from PyPI as normal.
+#
+# cuDNN build actually loaded at runtime (torch.backends.cudnn.version()):
+# 8902 -- bundled by the torch cu121 wheel above, not a separate system
+# install; recorded for the record, not something you pin separately.
+
+torch==2.2.2+cu121
+numpy==1.26.4
+h5py==3.16.0
+scipy==1.15.3
+matplotlib==3.10.9
+einops==0.8.2

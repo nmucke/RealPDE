@@ -1,0 +1,6 @@
+real/train: 73 files -> data/real/train
+real/val: 4 files -> data/real/val
+real/test: 4 files -> data/real/test
+sim/train: 89 files -> data/sim/train
+sim/val: 5 files -> data/sim/val
+sim/test: 5 files -> data/sim/test

@@ -1,0 +1,45 @@
+{
+  "id": "lb0920_n1_m1",
+  "group": "lineage",
+  "title": "09-20 upload n1 + M1 widths",
+  "description": "As lb0922_n1_w2, with the M1 conditional-width net (fitted on the held-out streams of three leave-conditions-out folds). Also stands for the 09-21 upload v8 (81.670): same weights and predictions, a timing-only code change.",
+  "approximates": {
+    "date": "2026-09-20",
+    "label": "b7c6004b (v2, 9 CUDA graphs)",
+    "package": "2026-09-29_simvp-s3-bundle-condwidth-graphed",
+    "package_dir": null,
+    "archive_sha256_prefix": "b7c6004b",
+    "config_source": null,
+    "leaderboard": {
+      "rel_l2": 94.704,
+      "tke": 80.398,
+      "mvpe": 94.376,
+      "time": 90.63,
+      "sps": 43.615,
+      "final": 81.701
+    }
+  },
+  "off": ["lsk", "kd8", "kd7", "kd6", "lowke", "bvr", "cdio", "ipw", "rec", "kd4", "kd5", "ipc", "br", "cb_w0", "kd2", "kd3", "fp16_core", "cb", "aw", "kw", "eb", "gm20", "msk", "scan_warm_only"],
+  "inference": {},
+  "training": {
+    "weights": "n1_m1",
+    "env": {
+      "BACKBONE": "n1",
+      "CONDWIDTH_RECIPE": "m1"
+    },
+    "arch": "n1_simvp",
+    "dry_run": {
+      "final_submission/realpde": "resolves; its step-10 package source (2026-10-06) is not in this repository, so train_preset.sh runs the weight steps 01-09 only"
+    },
+    "outputs": {
+      "model.pth, prior.npz, ke_net_flow.pt": "data/checkpoints/ship_simvp_s3",
+      "cond_width_weights.pt": "data/checkpoints/ship_condwidth/net_all3.pt"
+    },
+    "note": "the chain packages the n1 backbone with the 2026-10-06 source, not this upload's 2026-09-29 source"
+  },
+  "fidelity": {
+    "with_final_weights": "approximate",
+    "with_preset_weights": "approximate",
+    "why": "As lb0922_n1_w2; in addition this upload ran per-stage CUDA graphs instead of the whole-step graph (predictions bit-exact, bounds within 1e-6)."
+  }
+}

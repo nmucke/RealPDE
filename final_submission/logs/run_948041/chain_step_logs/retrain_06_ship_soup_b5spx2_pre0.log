@@ -1,0 +1,6 @@
+soup -> data/checkpoints/sp/b5sp_soup4_s3_all81.pth members 4
+  member a06815b63a71f34a76dccd849b50732807e5abc907ce15b4bd174de096c9925d  data/checkpoints/sp/b5sp_s3_all81.pth
+  member 73490169434d20bbcf296acbbbdc26493c07bdc99216a19d4468f5019257ce88  data/checkpoints/sp/b5sp_s3_all81_seed1.pth
+  member ad79574f47a0bd761e4f0645b45e234bc64f1866ebe8b8d83de6d4be47718c27  data/checkpoints/sp/b5sp_s3_all81_seed2.pth
+  member 76e943540171a1a97794f78657d01ef68d9e591e576a8e7cb96d419e8bfd8008  data/checkpoints/sp/b5sp_s3_all81_seed3.pth
+  soup   aba1dbaeffd2181fad1ab9b1e98a1b5c251328bbad0f6abe40aac6ebbd9d11f1  data/checkpoints/sp/b5sp_soup4_s3_all81.pth

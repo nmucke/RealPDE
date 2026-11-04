@@ -1,0 +1,324 @@
+[solution 2026-09-30 16:33:51] train(data_dir=/export/scratch1/ntm/tmp/fakedata, output_dir=/export/scratch1/ntm/tmp/pkg_rehearsal_out, device=cuda)
+[solution 2026-09-30 16:33:51] data: 100 train_sim files, 81 train_real files (7575_0.h5 present: False)
+[solution 2026-09-30 16:33:52] mean_std_real.pt: identical to the official file in /export/scratch1/ntm/tmp/fakedata
+[solution 2026-09-30 16:33:52] running: bash /export/scratch1/ntm/tmp/pkg_rehearsal_out/_work/realpde/scripts/retrain_all.sh  (cwd /export/scratch1/ntm/tmp/pkg_rehearsal_out/_work/realpde)
+== 00. sanity ==
+python 3.10.19 | torch 2.2.2+cu121 | numpy 1.26.4 | cuda True NVIDIA GeForce RTX 3090
+
+=== [01] data split (scripts/split_data.py, seed 0, 0.90/0.05/0.05 -> 73/4/4) ===
+real/train: 73 files -> data/real/train
+real/val: 4 files -> data/real/val
+real/test: 4 files -> data/real/test
+sim/train: 89 files -> data/sim/train
+sim/val: 5 files -> data/sim/val
+sim/test: 5 files -> data/sim/test
+  data/real/train 73 files
+  data/real/val   4 files
+  data/real/test  4 files
+=== [01] done in 0m01s ===
+
+=== [02] LCO splits (scripts/lco_make_splits.py + the documented aliases) ===
+/export/scratch1/ntm/tmp/pkg_rehearsal_out/_work/realpde/data/real_lco/fold0_aoa20_plus_re_extremes/train: 61 files
+/export/scratch1/ntm/tmp/pkg_rehearsal_out/_work/realpde/data/real_lco/fold0_aoa20_plus_re_extremes/heldout: 20 files
+fold fold0_aoa20_plus_re_extremes: train 61, heldout 20
+/export/scratch1/ntm/tmp/pkg_rehearsal_out/_work/realpde/data/real_lco/fold1_aoa15_plus_re_extremes/train: 61 files
+/export/scratch1/ntm/tmp/pkg_rehearsal_out/_work/realpde/data/real_lco/fold1_aoa15_plus_re_extremes/heldout: 20 files
+fold fold1_aoa15_plus_re_extremes: train 61, heldout 20
+/export/scratch1/ntm/tmp/pkg_rehearsal_out/_work/realpde/data/real_lco/fold2_aoa5_plus_re_extremes/train: 63 files
+/export/scratch1/ntm/tmp/pkg_rehearsal_out/_work/realpde/data/real_lco/fold2_aoa5_plus_re_extremes/heldout: 18 files
+fold fold2_aoa5_plus_re_extremes: train 63, heldout 18
+data/real_lco/foldR_leaderboard_mimic/train: 65 files
+data/real_lco/foldR_leaderboard_mimic/heldout: 16 files
+fold foldR_leaderboard_mimic: train 65, heldout 16
+  fold0: train 61 / heldout 20 (811 windows, expected 811: ok), train^heldout=0, 7575_0.h5=False
+  fold1: train 61 / heldout 20 (840 windows, expected 840: ok), train^heldout=0, 7575_0.h5=False
+  fold2: train 63 / heldout 18 (737 windows, expected 737: ok), train^heldout=0, 7575_0.h5=False
+  foldR: train 65 / heldout 16 (653 windows, expected 653: ok), train^heldout=0, 7575_0.h5=False
+=== [02] done in 0m00s ===
+
+=== [03] fold backbones (scripts/j1_finetune.py, 3 concurrent, --mem-frac 0.15) ===
+  fold0: it   8000  train_s3 0.23084  lr 0.00e+00  8.4 min
+  fold1: it   8000  train_s3 0.20762  lr 0.00e+00  8.4 min
+  foldR: it   8000  train_s3 0.22754  lr 0.00e+00  8.3 min
+=== [03] done in 9m19s ===
+
+=== [04] fold prior + ke_net_flow fits (c11a_fit_prior / c11a_fit_ke_flow, 3 concurrent) ===
+  fold0 ke_net_flow: [retrain_n1simvp_s3_fold0] BEST val e 0.4405 (tke 81.95) trk lo 0.762 hi 0.470 all 0.597 | rule e 0.5217 trk lo 0.746 hi 0.486 all 0.597
+  fold1 ke_net_flow: [retrain_n1simvp_s3_fold1] BEST val e 0.4353 (tke 82.13) trk lo 0.750 hi 0.454 all 0.607 | rule e 0.5095 trk lo 0.740 hi 0.463 all 0.608
+  foldR ke_net_flow: [retrain_n1simvp_s3_foldR] BEST val e 0.4547 (tke 81.48) trk lo 0.677 hi 0.482 all 0.601 | rule e 0.5292 trk lo 0.659 hi 0.488 all 0.596
+=== [04] done in 5m30s ===
+
+=== [05] fold held-out streams (scripts/lco_run_dump.py) + scoring (scripts/lco_analyze.py) ===
+  fold0 (recorded reference 81.868):   rel_l2=94.86  tke=80.39  mvpe=95.49  sps=47.29  time=88.00 (fixed)  coverage=0.872  composite=81.869
+  fold1 (recorded reference 82.353):   rel_l2=95.24  tke=81.19  mvpe=96.11  sps=47.95  time=88.00 (fixed)  coverage=0.871  composite=82.355
+  foldR (recorded reference 82.365):   rel_l2=95.50  tke=80.32  mvpe=96.51  sps=47.57  time=88.00 (fixed)  coverage=0.858  composite=82.352
+=== [05] done in 8m53s ===
+
+=== [05a] sim pretrain (scripts/sp_pretrain_sim.py, 100 train_sim files, 20k cosine stopped at 10k, seed 0) ===
+snapshot -> /export/scratch1/ntm/tmp/pkg_rehearsal_out/_work/realpde/data/checkpoints/sp/b5_sim_s3_it10k.pth
+stop-after 10000 reached
+done in 2.6 min
+  f452c1a7c5c396942b0c8fac2c0b8dc5c811f9b1cb65b38a2c226d66dc906339  data/checkpoints/sp/b5_sim_s3_it10k.pth   (validated 2026-09-23: f1d6594c1ba119856ade3975e793cd8032e6bba6caa2277c4e24e46adccce2fc)
+=== [05a] done in 2m54s ===
+
+=== [05a] sim pretrain, seed 1 (scripts/sp_pretrain_sim.py, 100 train_sim files, 20k cosine stopped at 10k) ===
+snapshot -> /export/scratch1/ntm/tmp/pkg_rehearsal_out/_work/realpde/data/checkpoints/sp/b5_sim_s3_seed1_it10k.pth
+stop-after 10000 reached
+done in 2.7 min
+  1b0a9adc31ce145e850868bd11674c1ce27cfbb1e76c2ebd98027701ab7c7632  data/checkpoints/sp/b5_sim_s3_seed1_it10k.pth   (4090 build 2026-09-23: f9b0438654cbd87bc32c43bbf9fdd093d9ea3d515b369418c5b64fc4a6bb42ee; other GPUs differ, as for seed 0)
+=== [05a] done in 2m56s ===
+
+=== [05a] sim pretrain, seed 2 (scripts/sp_pretrain_sim.py, 100 train_sim files, 20k cosine stopped at 10k) ===
+snapshot -> /export/scratch1/ntm/tmp/pkg_rehearsal_out/_work/realpde/data/checkpoints/sp/b5_sim_s3_seed2_it10k.pth
+stop-after 10000 reached
+done in 2.7 min
+  725c4248a1db1f626abfdb08e5fbfbdbc43c95d73961fd244f273c794620b663  data/checkpoints/sp/b5_sim_s3_seed2_it10k.pth   (3090 build 2026-09-24, K3: d34783b8cf2a8b25d3890b43c01a04c67393d1402e25143dc34779b8e8f31529; other GPUs differ)
+=== [05a] done in 2m56s ===
+
+=== [05b] K-fold out-of-sample data, b5 backbones (all81, K=4; scripts/b1s_make_kfold_pool.sh) ===
+  materialised data/real_all81: 81 files (7575_0.h5 excluded)
+patched experiments/b1_3090/kfold/all81/g1/pipe/submission.py -> model=b5_h192_blk6_rf11 ckpt=/export/scratch1/ntm/tmp/pkg_rehearsal_out/_work/realpde/data/checkpoints/b1_3090/kfold/b5_h192_blk6_rf11_all81_g1.pth
+patched experiments/b1_3090/kfold/all81/g2/pipe/submission.py -> model=b5_h192_blk6_rf11 ckpt=/export/scratch1/ntm/tmp/pkg_rehearsal_out/_work/realpde/data/checkpoints/b1_3090/kfold/b5_h192_blk6_rf11_all81_g2.pth
+patched experiments/b1_3090/kfold/all81/g3/pipe/submission.py -> model=b5_h192_blk6_rf11 ckpt=/export/scratch1/ntm/tmp/pkg_rehearsal_out/_work/realpde/data/checkpoints/b1_3090/kfold/b5_h192_blk6_rf11_all81_g3.pth
+=== all81 K=4 pool done 2026-09-30T15:31:03Z ===
+c9ec7faa4d2c1373218cd75c712165c018e93e70c4676aa6f25e3d72f2161e8b  data/checkpoints/b1_3090/kfold/b5_h192_blk6_rf11_all81_g0.pth
+0a2cc8693459930a11df3f20d2bebb3855f3297c6250e4ded485beb413bc7309  experiments/b1_3090/cache/feat_all81_g0.npz
+b958d0cccbb79edb0b1c7013f9e0c2c6afe3c193e0087d4e1afc2d188c1c1831  data/checkpoints/b1_3090/kfold/b5_h192_blk6_rf11_all81_g1.pth
+d36c347aa8d6bf45b7a9d1726c0b6214f038b1eac191e4ab0ff356d0445fdd9c  experiments/b1_3090/cache/feat_all81_g1.npz
+7d2967b4611203ab1e32d4a388a395539e3e1948b07a3f055a887bc01a314029  data/checkpoints/b1_3090/kfold/b5_h192_blk6_rf11_all81_g2.pth
+80aac382f3871a9527d678b72d77b3a107c9ca87f4b12bcadbbfeedadd457355  experiments/b1_3090/cache/feat_all81_g2.npz
+fb473f4348b605356c4e0aa8a1d0dd29e92f62b88aa27f0d65859a2321cf8f99  data/checkpoints/b1_3090/kfold/b5_h192_blk6_rf11_all81_g3.pth
+3172d953d814244066d492e880e47249aaadf303f024a747449d11b9c2b3c0ed  experiments/b1_3090/cache/feat_all81_g3.npz
+  feature caches: /export/scratch1/ntm/tmp/pkg_rehearsal_out/_work/realpde/experiments/b1_3090/cache/feat_all81_g*.npz
+=== [05b] done in 24m43s ===
+
+=== [06] ENRx members (b5spx2): soup of 4 all-81 fine-tunes per SP init (scripts/sp_finetune.py + scripts/c2_make_soup.py) ===
+  materialised data/real_all81: 81 files (7575_0.h5 excluded)
+it   7750  train_s3 0.45113  lr 1.28e-06  2.4 min
+it   8000  train_s3 0.44057  lr 0.00e+00  2.5 min
+peak GPU: 1.67 GiB allocated
+done in 2.5 min -> /export/scratch1/ntm/tmp/pkg_rehearsal_out/_work/realpde/data/checkpoints/sp/b5sp_s3_all81.pth
+it   7750  train_s3 0.49537  lr 1.28e-06  2.4 min
+it   8000  train_s3 0.51222  lr 0.00e+00  2.4 min
+peak GPU: 1.67 GiB allocated
+done in 2.4 min -> /export/scratch1/ntm/tmp/pkg_rehearsal_out/_work/realpde/data/checkpoints/sp/b5sp_s3_all81_seed1.pth
+it   7750  train_s3 0.45490  lr 1.28e-06  2.4 min
+it   8000  train_s3 0.44099  lr 0.00e+00  2.5 min
+peak GPU: 1.67 GiB allocated
+done in 2.5 min -> /export/scratch1/ntm/tmp/pkg_rehearsal_out/_work/realpde/data/checkpoints/sp/b5sp_s3_all81_seed2.pth
+it   7750  train_s3 0.69542  lr 1.28e-06  2.3 min
+it   8000  train_s3 0.70360  lr 0.00e+00  2.3 min
+peak GPU: 1.67 GiB allocated
+done in 2.3 min -> /export/scratch1/ntm/tmp/pkg_rehearsal_out/_work/realpde/data/checkpoints/sp/b5sp_s3_all81_seed3.pth
+soup -> data/checkpoints/sp/b5sp_soup4_s3_all81.pth members 4
+  member ed625e564b8835a47a9fd6869f3353cd471553e9b0abe39fd8a9858e3853799a  data/checkpoints/sp/b5sp_s3_all81.pth
+  member b8add3a60161ab32d66a84853b79a090ecf721dc3b7508d872ef2320579dbcbe  data/checkpoints/sp/b5sp_s3_all81_seed1.pth
+  member 1ded21e1d12efb0872b13693e5d19e6108ea388d003812dd22660f1f2e340fd3  data/checkpoints/sp/b5sp_s3_all81_seed2.pth
+  member f9043cc0ffdab0dad164aa09e6997704c14ab16af767bba8f224f5b744a87463  data/checkpoints/sp/b5sp_s3_all81_seed3.pth
+  soup   c6a62692861a31d4054a12df7769d0d9b1be7eacaecca68657b2ba3975847965  data/checkpoints/sp/b5sp_soup4_s3_all81.pth
+it   7750  train_s3 0.43758  lr 1.28e-06  2.4 min
+it   8000  train_s3 0.42741  lr 0.00e+00  2.5 min
+peak GPU: 1.67 GiB allocated
+done in 2.5 min -> /export/scratch1/ntm/tmp/pkg_rehearsal_out/_work/realpde/data/checkpoints/sp/b5sp_pre1_s3_all81_seed0.pth
+it   7750  train_s3 0.47430  lr 1.28e-06  2.4 min
+it   8000  train_s3 0.49030  lr 0.00e+00  2.4 min
+peak GPU: 1.67 GiB allocated
+done in 2.4 min -> /export/scratch1/ntm/tmp/pkg_rehearsal_out/_work/realpde/data/checkpoints/sp/b5sp_pre1_s3_all81_seed1.pth
+it   7750  train_s3 0.42889  lr 1.28e-06  2.1 min
+it   8000  train_s3 0.41588  lr 0.00e+00  2.2 min
+peak GPU: 1.67 GiB allocated
+done in 2.2 min -> /export/scratch1/ntm/tmp/pkg_rehearsal_out/_work/realpde/data/checkpoints/sp/b5sp_pre1_s3_all81_seed2.pth
+it   7750  train_s3 0.67460  lr 1.28e-06  2.4 min
+it   8000  train_s3 0.68178  lr 0.00e+00  2.5 min
+peak GPU: 1.67 GiB allocated
+done in 2.5 min -> /export/scratch1/ntm/tmp/pkg_rehearsal_out/_work/realpde/data/checkpoints/sp/b5sp_pre1_s3_all81_seed3.pth
+soup -> data/checkpoints/sp/b5sp_pre1_soup4_s3_all81.pth members 4
+  member 44c30ab9719c06c1fc7f09683f3ae1f1fe90e14d9190a8cb6645c995ceb79e12  data/checkpoints/sp/b5sp_pre1_s3_all81_seed0.pth
+  member f5140a53566bdc9385b1afa2fbf180ea5384b972142305322b4b8f00526c04ec  data/checkpoints/sp/b5sp_pre1_s3_all81_seed1.pth
+  member 520f41aef1ab2f2626484609d3f1f241775765cb0f103a4fe4931cc13b29e748  data/checkpoints/sp/b5sp_pre1_s3_all81_seed2.pth
+  member 504d17f32423c0fe8eaa40e969704392d52ccf3889d200f596d8086d512939b1  data/checkpoints/sp/b5sp_pre1_s3_all81_seed3.pth
+  soup   b916de6f24d4cba11e184711bafdc6fa9ea7fc3813a031bbe19e5b191fc4f709  data/checkpoints/sp/b5sp_pre1_soup4_s3_all81.pth
+=== [06] done in 28m37s ===
+
+=== [06] ENRx member 2 (b5spx3): soup of 4 all-81 fine-tunes from SP init seed 2 ===
+  materialised data/real_all81: 81 files (7575_0.h5 excluded)
+it   7750  train_s3 0.43376  lr 1.28e-06  2.4 min
+it   8000  train_s3 0.42366  lr 0.00e+00  2.5 min
+peak GPU: 1.67 GiB allocated
+done in 2.5 min -> /export/scratch1/ntm/tmp/pkg_rehearsal_out/_work/realpde/data/checkpoints/sp/b5sp_pre2_s3_all81_seed0.pth
+it   7750  train_s3 0.47092  lr 1.28e-06  2.4 min
+it   8000  train_s3 0.48686  lr 0.00e+00  2.5 min
+peak GPU: 1.67 GiB allocated
+done in 2.5 min -> /export/scratch1/ntm/tmp/pkg_rehearsal_out/_work/realpde/data/checkpoints/sp/b5sp_pre2_s3_all81_seed1.pth
+it   7750  train_s3 0.42583  lr 1.28e-06  2.4 min
+it   8000  train_s3 0.41258  lr 0.00e+00  2.5 min
+peak GPU: 1.67 GiB allocated
+done in 2.5 min -> /export/scratch1/ntm/tmp/pkg_rehearsal_out/_work/realpde/data/checkpoints/sp/b5sp_pre2_s3_all81_seed2.pth
+it   7750  train_s3 0.66055  lr 1.28e-06  2.4 min
+it   8000  train_s3 0.66809  lr 0.00e+00  2.5 min
+peak GPU: 1.67 GiB allocated
+done in 2.5 min -> /export/scratch1/ntm/tmp/pkg_rehearsal_out/_work/realpde/data/checkpoints/sp/b5sp_pre2_s3_all81_seed3.pth
+soup -> data/checkpoints/sp/b5sp_pre2_soup4_s3_all81.pth members 4
+  member cac8b317c5f4f00b7327be196b76ee6c374184b7caf6d90198630a39a7a95ec3  data/checkpoints/sp/b5sp_pre2_s3_all81_seed0.pth
+  member 256cda5a7de43622dcce89af10501e44bfbe397a5c26a7d5a1f0a99d75d648fc  data/checkpoints/sp/b5sp_pre2_s3_all81_seed1.pth
+  member d930450485604ed687235816b9e2b954271dda6cfe00540589d12301641d57c6  data/checkpoints/sp/b5sp_pre2_s3_all81_seed2.pth
+  member 4f048c3af816c00a949a0b6bf5d92e5381f9083967ef696e1fe2a0bdf3c10fed  data/checkpoints/sp/b5sp_pre2_s3_all81_seed3.pth
+  soup   424fc934ad79161313e98c7426a52a0d000d17b3a5ec1f077bbc38a0b785b9e4  data/checkpoints/sp/b5sp_pre2_soup4_s3_all81.pth
+=== [06] done in 14m29s ===
+
+=== [07] pack (scripts/k3_pack_b5xk.py: the three soups fp32 + "arch": "b5x3_h192_blk6_rf11") ===
+wrote data/checkpoints/sp/ship_enrx3_soup4_kes4/model.pth: arch=b5x3_h192_blk6_rf11 members=['b5sp_soup4_s3_all81.pth', 'b5sp_pre1_soup4_s3_all81.pth', 'b5sp_pre2_soup4_s3_all81.pth'] params(total)=10,171,380 size=40.77 MB
+=== [07] done in 0m01s ===
+
+=== [08] ensemble prior + ke_net_flow, b5spx3 (en_fit_prior / en_fit_ke_flow, 3 members, all 81 files) ===
+  materialised data/real_all81: 81 files (7575_0.h5 excluded)
+wrote /export/scratch1/ntm/tmp/pkg_rehearsal_out/_work/realpde/data/checkpoints/sp/ship_enrx3_soup4_kes4/prior.npz (16.1 MB, 81 files)
+[b5spx3_ship_all81] BEST val e 0.4341 (tke 82.16) trk lo 0.726 hi 0.593 all 0.641 | rule e 0.5087 trk lo 0.711 hi 0.589 all 0.637
+[kes_ship_all81_b5spx3] mean single-seed val e 0.4351 (tke 82.13) | ensemble val e 0.4307 (tke 82.28) | relative gain 1.02% | PASS
+dense K=4 width 96 wide 128 in_ch 42 -> data/checkpoints/sp/ship_enrx3_soup4_kes4/ke_net_flow.pt
+fp64 max|dense - mean of seeds| 6.519e-09  max|packed - mean| 0.000e+00  (|ref| max 1.682)
+=== [08] done in 13m49s ===
+
+=== [09] W2 v2 conditional-width fit (scripts/w2_fit.py + scripts/w2_convert_ckpt.py, K=4 all-81 caches, best-of-N seeds) ===
+[val grid] sps=51.9361 (ref 50.9367, delta +0.9995) alpha=1.0 lam=1.05 cov=0.8786
+[val grid] sps=50.8119 (ref 49.8586, delta +0.9533) alpha=1.0 lam=1.05 cov=0.8791
+[val grid] sps=53.6834 (ref 52.8450, delta +0.8384) alpha=1.0 lam=1.05 cov=0.8882
+self-check max|diff| = 2.98e-07; alpha=1.0 lambda=1.05
+wrote /export/scratch1/ntm/tmp/pkg_rehearsal_out/_work/realpde/data/checkpoints/b1_3090/ship_condwidth_v2/cond_width_weights.pt
+  bd845a7e280a555b15bd43d6597402de5a2e75f93a5082913d189aebfdfacec6  /export/scratch1/ntm/tmp/pkg_rehearsal_out/_work/realpde/data/checkpoints/b1_3090/ship_condwidth_v2/cond_width_weights.pt   (shipped 2026-09-22, n1: 16a65296dc561e04143f3e8a5bf056bb8e5a0cb4ec314ae59a37f2c576e4d089)
+=== [09] done in 17m45s ===
+
+=== [10] package assembly (scripts/pack_zip.py) ===
+  model.pth arch: b5x3_h192_blk6_rf11
+wrote /export/scratch1/ntm/tmp/pkg_rehearsal_out/_work/realpde/submissions/retrained_simvp-b5spx3-soup4-fp16-cbadapt-axe-gm20-msk-kd5-kd4-kd6-kd7-rec-ipc-ipw-cdio-bvr-lowke-lsk-recr-kd8-r97-kes4-s3-bundle-condwidth-v2-wholestep-t2-w01-kd/submission.zip (54.8 MB zipped, 83 files)
+  47efa4f95c9428d633f4ae9ce26b7fb141c157b52417844ebec40b5c882bd4de  /export/scratch1/ntm/tmp/pkg_rehearsal_out/_work/realpde/submissions/retrained_simvp-b5spx3-soup4-fp16-cbadapt-axe-gm20-msk-kd5-kd4-kd6-kd7-rec-ipc-ipw-cdio-bvr-lowke-lsk-recr-kd8-r97-kes4-s3-bundle-condwidth-v2-wholestep-t2-w01-kd/submission.zip
+=== [10] done in 0m05s ===
+
+=== [11] local_eval.py sanity run on data/real/{val,test} ===
+  --- val ---
+  [local_eval]     rel_l2_score  96.952
+  [local_eval]     tke_score     81.832
+  [local_eval]     mvpe_score    97.816
+  [local_eval]     time_score    94.492
+  [local_eval]     sps_score     60.840
+  [local_eval] the leaderboard combines these five into final_score by a rule that is not published, so no total is shown here.
+  [local_eval] OK: submission ran end-to-end with correct shapes.
+  --- test ---
+  [local_eval]     rel_l2_score  96.175
+  [local_eval]     tke_score     82.162
+  [local_eval]     mvpe_score    97.501
+  [local_eval]     time_score    94.493
+  [local_eval]     sps_score     52.235
+  [local_eval] the leaderboard combines these five into final_score by a rule that is not published, so no total is shown here.
+  [local_eval] OK: submission ran end-to-end with correct shapes.
+=== [11] done in 0m41s ===
+retrain_all.sh report -- 2026-09-30T16:46:32Z
+repo HEAD: (not a git checkout)
+BACKBONE=b5spx2  SOUP_K=4  SHIP_DIR=data/checkpoints/sp/ship_enrx3_soup4_kes4  SHIP_CKPT=data/checkpoints/sp/b5sp_soup4_s3_all81.pth  W2_OUT=/export/scratch1/ntm/tmp/pkg_rehearsal_out/_work/realpde/data/checkpoints/b1_3090/ship_condwidth_v2
+b5spx2 (c2 ENRx): SOUP_K=4  ENRX_KE=0  X2_DIR=data/checkpoints/sp/ship_enrx3_soup4_kes4  SRC_PKG=/export/scratch1/ntm/tmp/pkg_rehearsal_out/_work/realpde/submissions/2026-10-23_simvp-b5spx3-soup4-fp16-cbadapt-axe-gm20-msk-kd5-kd4-kd6-kd7-rec-ipc-ipw-cdio-bvr-lowke-lsk-recr-kd8-r97/source
+  member 0 = data/checkpoints/sp/b5sp_soup4_s3_all81.pth   member 1 = data/checkpoints/sp/b5sp_pre1_soup4_s3_all81.pth
+  -- SP inits --
+  f452c1a7c5c396942b0c8fac2c0b8dc5c811f9b1cb65b38a2c226d66dc906339  data/checkpoints/sp/b5_sim_s3_it10k.pth
+  1b0a9adc31ce145e850868bd11674c1ce27cfbb1e76c2ebd98027701ab7c7632  data/checkpoints/sp/b5_sim_s3_seed1_it10k.pth
+  -- soup pre0 (scripts/c2_make_soup.py; absent = soup reused from an earlier run, or SOUP_K=1) --
+  soup -> data/checkpoints/sp/b5sp_soup4_s3_all81.pth members 4
+    member ed625e564b8835a47a9fd6869f3353cd471553e9b0abe39fd8a9858e3853799a  data/checkpoints/sp/b5sp_s3_all81.pth
+    member b8add3a60161ab32d66a84853b79a090ecf721dc3b7508d872ef2320579dbcbe  data/checkpoints/sp/b5sp_s3_all81_seed1.pth
+    member 1ded21e1d12efb0872b13693e5d19e6108ea388d003812dd22660f1f2e340fd3  data/checkpoints/sp/b5sp_s3_all81_seed2.pth
+    member f9043cc0ffdab0dad164aa09e6997704c14ab16af767bba8f224f5b744a87463  data/checkpoints/sp/b5sp_s3_all81_seed3.pth
+    soup   c6a62692861a31d4054a12df7769d0d9b1be7eacaecca68657b2ba3975847965  data/checkpoints/sp/b5sp_soup4_s3_all81.pth
+  -- soup pre1 (scripts/c2_make_soup.py; absent = soup reused from an earlier run, or SOUP_K=1) --
+  soup -> data/checkpoints/sp/b5sp_pre1_soup4_s3_all81.pth members 4
+    member 44c30ab9719c06c1fc7f09683f3ae1f1fe90e14d9190a8cb6645c995ceb79e12  data/checkpoints/sp/b5sp_pre1_s3_all81_seed0.pth
+    member f5140a53566bdc9385b1afa2fbf180ea5384b972142305322b4b8f00526c04ec  data/checkpoints/sp/b5sp_pre1_s3_all81_seed1.pth
+    member 520f41aef1ab2f2626484609d3f1f241775765cb0f103a4fe4931cc13b29e748  data/checkpoints/sp/b5sp_pre1_s3_all81_seed2.pth
+    member 504d17f32423c0fe8eaa40e969704392d52ccf3889d200f596d8086d512939b1  data/checkpoints/sp/b5sp_pre1_s3_all81_seed3.pth
+    soup   b916de6f24d4cba11e184711bafdc6fa9ea7fc3813a031bbe19e5b191fc4f709  data/checkpoints/sp/b5sp_pre1_soup4_s3_all81.pth
+  -- fine-tunes / members / X2_DIR artefacts --
+  b5spx3 (K3F): FP16=1  AXE=1  KD2=1  KD3=1  IPC=1  KD5=1  KD4=1  REC=1  member 2 = data/checkpoints/sp/b5sp_pre2_soup4_s3_all81.pth
+  725c4248a1db1f626abfdb08e5fbfbdbc43c95d73961fd244f273c794620b663  data/checkpoints/sp/b5_sim_s3_seed2_it10k.pth
+  soup -> data/checkpoints/sp/b5sp_pre2_soup4_s3_all81.pth members 4
+    member cac8b317c5f4f00b7327be196b76ee6c374184b7caf6d90198630a39a7a95ec3  data/checkpoints/sp/b5sp_pre2_s3_all81_seed0.pth
+    member 256cda5a7de43622dcce89af10501e44bfbe397a5c26a7d5a1f0a99d75d648fc  data/checkpoints/sp/b5sp_pre2_s3_all81_seed1.pth
+    member d930450485604ed687235816b9e2b954271dda6cfe00540589d12301641d57c6  data/checkpoints/sp/b5sp_pre2_s3_all81_seed2.pth
+    member 4f048c3af816c00a949a0b6bf5d92e5381f9083967ef696e1fe2a0bdf3c10fed  data/checkpoints/sp/b5sp_pre2_s3_all81_seed3.pth
+    soup   424fc934ad79161313e98c7426a52a0d000d17b3a5ec1f077bbc38a0b785b9e4  data/checkpoints/sp/b5sp_pre2_soup4_s3_all81.pth
+  ed625e564b8835a47a9fd6869f3353cd471553e9b0abe39fd8a9858e3853799a  data/checkpoints/sp/b5sp_s3_all81.pth
+  b8add3a60161ab32d66a84853b79a090ecf721dc3b7508d872ef2320579dbcbe  data/checkpoints/sp/b5sp_s3_all81_seed1.pth
+  1ded21e1d12efb0872b13693e5d19e6108ea388d003812dd22660f1f2e340fd3  data/checkpoints/sp/b5sp_s3_all81_seed2.pth
+  f9043cc0ffdab0dad164aa09e6997704c14ab16af767bba8f224f5b744a87463  data/checkpoints/sp/b5sp_s3_all81_seed3.pth
+  44c30ab9719c06c1fc7f09683f3ae1f1fe90e14d9190a8cb6645c995ceb79e12  data/checkpoints/sp/b5sp_pre1_s3_all81_seed0.pth
+  f5140a53566bdc9385b1afa2fbf180ea5384b972142305322b4b8f00526c04ec  data/checkpoints/sp/b5sp_pre1_s3_all81_seed1.pth
+  520f41aef1ab2f2626484609d3f1f241775765cb0f103a4fe4931cc13b29e748  data/checkpoints/sp/b5sp_pre1_s3_all81_seed2.pth
+  504d17f32423c0fe8eaa40e969704392d52ccf3889d200f596d8086d512939b1  data/checkpoints/sp/b5sp_pre1_s3_all81_seed3.pth
+  cac8b317c5f4f00b7327be196b76ee6c374184b7caf6d90198630a39a7a95ec3  data/checkpoints/sp/b5sp_pre2_s3_all81_seed0.pth
+  256cda5a7de43622dcce89af10501e44bfbe397a5c26a7d5a1f0a99d75d648fc  data/checkpoints/sp/b5sp_pre2_s3_all81_seed1.pth
+  d930450485604ed687235816b9e2b954271dda6cfe00540589d12301641d57c6  data/checkpoints/sp/b5sp_pre2_s3_all81_seed2.pth
+  4f048c3af816c00a949a0b6bf5d92e5381f9083967ef696e1fe2a0bdf3c10fed  data/checkpoints/sp/b5sp_pre2_s3_all81_seed3.pth
+  c6a62692861a31d4054a12df7769d0d9b1be7eacaecca68657b2ba3975847965  data/checkpoints/sp/b5sp_soup4_s3_all81.pth
+  b916de6f24d4cba11e184711bafdc6fa9ea7fc3813a031bbe19e5b191fc4f709  data/checkpoints/sp/b5sp_pre1_soup4_s3_all81.pth
+  424fc934ad79161313e98c7426a52a0d000d17b3a5ec1f077bbc38a0b785b9e4  data/checkpoints/sp/b5sp_pre2_soup4_s3_all81.pth
+  2716f119bf8c8c4f89a923092793e7f8f52763fe1e0ab634378719533ae9e288  data/checkpoints/sp/ship_enrx3_soup4_kes4/model.pth
+  5bbbf24650cce78d33f7e2df9bced4ece3fe56a242c59106481876703348459d  data/checkpoints/sp/ship_enrx3_soup4_kes4/prior.npz
+  633b272a10e1722ef296aa83753a3d1d67bd86572f402818c32c5ce3e1656aeb  data/checkpoints/sp/ship_enrx3_soup4_kes4/ke_net_flow.pt
+
+== wall time per step (seconds) ==
+01 1
+02 0
+03 559
+04 330
+05 533
+05a 174
+05a 176
+05a 176
+05b 1483
+06 1717
+06 869
+07 1
+08 829
+09 1065
+10 5
+11 41
+
+== artefact sha256 ==
+  (split) data/real/train: 73 files
+  (split) data/real/val: 4 files
+  (split) data/real/test: 4 files
+01ed04ad9a45de711e2985977149059b24a302f868d68d88d4971c2c9e001bae  data/checkpoints/j1/n1simvp_s3_fold0.pth
+1c731c335da7469cb1558140414f7063084a7370c07bbb52120cdf1370711975  data/checkpoints/d2/n1simvp_s3_fold1.pth
+dd035bd91bea420620e3bb868dacb3b726fe04db64fb6d3b33887adc51a9ab47  data/checkpoints/d2/n1simvp_s3_foldR.pth
+7974c2bf8c16ab1214e03623664287bc2f4aeb259c89f324f7a0e64242a28e3b  experiments/d2_bundle/fold0_c/prior.npz
+de5fcf94bf414d7855583cb09b86b49c2b1c6c9d26e566e8e15a0d18fdd862ee  experiments/d2_bundle/fold0_c/ke_net_flow.pt
+da916892cc7e68cd70eb2863e7e8e00397e077582588eafa00afea003d71ceae  experiments/d2_bundle/fold1_c/prior.npz
+8ee2343e906faa578f75443fcfc9df69baf05d31c97fcabdf9ca1ac7cffaa9f3  experiments/d2_bundle/fold1_c/ke_net_flow.pt
+f0dafc9a63d1491e0064253a68d30dda6f321fbc0fc9bfd86d85dad5ebfae001  experiments/d2_bundle/foldR_c/prior.npz
+d0c5b95a2916641c124cf5fa1f3bcc1031b16e9f5cb97a0249aedadb38146b69  experiments/d2_bundle/foldR_c/ke_net_flow.pt
+f452c1a7c5c396942b0c8fac2c0b8dc5c811f9b1cb65b38a2c226d66dc906339  data/checkpoints/sp/b5_sim_s3_it10k.pth
+ed625e564b8835a47a9fd6869f3353cd471553e9b0abe39fd8a9858e3853799a  data/checkpoints/sp/b5sp_s3_all81.pth
+bd845a7e280a555b15bd43d6597402de5a2e75f93a5082913d189aebfdfacec6  /export/scratch1/ntm/tmp/pkg_rehearsal_out/_work/realpde/data/checkpoints/b1_3090/ship_condwidth_v2/cond_width_weights.pt
+47efa4f95c9428d633f4ae9ce26b7fb141c157b52417844ebec40b5c882bd4de  /export/scratch1/ntm/tmp/pkg_rehearsal_out/_work/realpde/submissions/retrained_simvp-b5spx3-soup4-fp16-cbadapt-axe-gm20-msk-kd5-kd4-kd6-kd7-rec-ipc-ipw-cdio-bvr-lowke-lsk-recr-kd8-r97-kes4-s3-bundle-condwidth-v2-wholestep-t2-w01-kd/submission.zip
+
+== fold held-out composites (time subscore fixed at 88) ==
+  fold0 (reference 81.868):   rel_l2=94.86  tke=80.39  mvpe=95.49  sps=47.29  time=88.00 (fixed)  coverage=0.872  composite=81.869
+  fold1 (reference 82.353):   rel_l2=95.24  tke=81.19  mvpe=96.11  sps=47.95  time=88.00 (fixed)  coverage=0.871  composite=82.355
+  foldR (reference 82.365):   rel_l2=95.50  tke=80.32  mvpe=96.51  sps=47.57  time=88.00 (fixed)  coverage=0.858  composite=82.352
+
+== local_eval (memorised splits -- sanity only) ==
+  --- val ---
+  [local_eval]     rel_l2_score  96.952
+  [local_eval]     tke_score     81.832
+  [local_eval]     mvpe_score    97.816
+  [local_eval]     time_score    94.492
+  [local_eval]     sps_score     60.840
+  [local_eval] the leaderboard combines these five into final_score by a rule that is not published, so no total is shown here.
+  --- test ---
+  [local_eval]     rel_l2_score  96.175
+  [local_eval]     tke_score     82.162
+  [local_eval]     mvpe_score    97.501
+  [local_eval]     time_score    94.493
+  [local_eval]     sps_score     52.235
+  [local_eval] the leaderboard combines these five into final_score by a rule that is not published, so no total is shown here.
+
+== retrain_all.sh finished ==
+package: /export/scratch1/ntm/tmp/pkg_rehearsal_out/_work/realpde/submissions/retrained_simvp-b5spx3-soup4-fp16-cbadapt-axe-gm20-msk-kd5-kd4-kd6-kd7-rec-ipc-ipw-cdio-bvr-lowke-lsk-recr-kd8-r97-kes4-s3-bundle-condwidth-v2-wholestep-t2-w01-kd/submission.zip
+[solution 2026-09-30 18:46:33] done in 132.7 min; package in /export/scratch1/ntm/tmp/pkg_rehearsal_out/package (zip sha256 47efa4f95c9428d633f4ae9ce26b7fb141c157b52417844ebec40b5c882bd4de)

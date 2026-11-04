@@ -1,0 +1,48 @@
+{
+  "id": "lb0925_fze",
+  "group": "lineage",
+  "title": "09-25 upload FZ-E",
+  "description": "The 09-24 package plus: a wider grid for the per-trajectory energy-blend choice, a per-trajectory blend-ridge choice, CB weight 1.0 on window 0 (together called AXE), the regime-change reset (REC), and the IPC, KD4 and KD5 execution changes. Energy net: one net fitted on the 3-member ensemble (the 4-seed energy net came on 09-26).",
+  "approximates": {
+    "date": "2026-09-25",
+    "label": "53f7865c (retrain of FZ-E e71e0cbf on a second machine, Codabench 944304)",
+    "package_dir": "final_submission/realpde/submissions/2026-10-19_simvp-b5spx3-soup4-fp16-cbadapt-axe-gm20-msk-kd5-kd4-rec-ipc-s3-bundle-condwidth-v2-wholestep-t2-w01-kd",
+    "archive_sha256_prefix": "53f7865c",
+    "config_source": "final_submission/realpde/submissions/2026-10-19_simvp-b5spx3-soup4-fp16-cbadapt-axe-gm20-msk-kd5-kd4-rec-ipc-s3-bundle-condwidth-v2-wholestep-t2-w01-kd/source",
+    "leaderboard": {
+      "rel_l2": 94.862633,
+      "tke": 81.031615,
+      "mvpe": 94.392779,
+      "time": 91.54425,
+      "sps": 45.184824,
+      "final": 82.311471
+    }
+  },
+  "off": ["lsk", "kd8", "kd7", "kd6", "lowke", "bvr", "cdio", "ipw"],
+  "inference": {},
+  "training": {
+    "weights": "k3_ke1",
+    "env": {
+      "FREEZE_DEFAULTS": "0",
+      "AXE": "1",
+      "IPC": "1",
+      "KD5": "1",
+      "KD4": "1",
+      "REC": "1"
+    },
+    "arch": "b5x3_h192_blk6_rf11",
+    "dry_run": {
+      "final_submission/realpde": "resolves"
+    },
+    "outputs": {
+      "model.pth, prior.npz, ke_net_flow.pt": "data/checkpoints/sp/ship_enrx3_soup4",
+      "cond_width_weights.pt": "data/checkpoints/b1_3090/ship_condwidth_v2/cond_width_weights.pt"
+    },
+    "note": "differs from the final weights only in ke_net_flow.pt; KE3=0 on the default flags builds the same weight dir"
+  },
+  "fidelity": {
+    "with_final_weights": "same code path, different weights",
+    "with_preset_weights": "exact",
+    "why": "Each component switched off here was checked bit-exact against the package before it when it was added (independent verification runs; development notes, not published). With the final weights the energy net is the 4-seed one, not this upload's."
+  }
+}

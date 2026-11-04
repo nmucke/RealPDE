@@ -1,0 +1,41 @@
+{
+  "id": "lb0927_final",
+  "group": "lineage",
+  "title": "final package (09-27 upload)",
+  "description": "The final package as submitted: packed 3-member backbone ensemble in fp16 and the full pipeline, with every adaptive and execution component on.",
+  "approximates": {
+    "date": "2026-09-27",
+    "label": "f11d2c1d (Codabench submission 948041)",
+    "package_dir": "final_submission/realpde/submissions/2026-10-23_simvp-b5spx3-soup4-fp16-cbadapt-axe-gm20-msk-kd5-kd4-kd6-kd7-rec-ipc-ipw-cdio-bvr-lowke-lsk-recr-kd8-r97",
+    "archive_sha256_prefix": "f11d2c1d",
+    "config_source": "final_submission/realpde/submissions/2026-10-23_simvp-b5spx3-soup4-fp16-cbadapt-axe-gm20-msk-kd5-kd4-kd6-kd7-rec-ipc-ipw-cdio-bvr-lowke-lsk-recr-kd8-r97/source",
+    "leaderboard": {
+      "rel_l2": 94.939383,
+      "tke": 81.016714,
+      "mvpe": 94.49995,
+      "time": 92.46405,
+      "sps": 45.210544,
+      "final": 82.451995
+    }
+  },
+  "off": [],
+  "inference": {},
+  "training": {
+    "weights": "final",
+    "env": {},
+    "arch": "b5x3_h192_blk6_rf11",
+    "dry_run": {
+      "final_submission/realpde": "resolves"
+    },
+    "outputs": {
+      "model.pth, prior.npz, ke_net_flow.pt": "data/checkpoints/sp/ship_enrx3_soup4_kes4",
+      "cond_width_weights.pt": "data/checkpoints/b1_3090/ship_condwidth_v2/cond_width_weights.pt"
+    },
+    "note": "the default chain; also what final_submission/solution.py train() runs"
+  },
+  "fidelity": {
+    "with_final_weights": "exact",
+    "with_preset_weights": "exact",
+    "why": "CONFIG and code are those of the upload. The weights are a retrain of the same recipe, which moves the final score by about +-0.03 (final_submission/README.md)."
+  }
+}

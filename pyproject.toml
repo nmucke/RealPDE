@@ -1,0 +1,29 @@
+[project]
+name = "realpde-t2-nmucke"
+version = "1.0.0"
+description = "Team nmucke's Track 2 entry to the NeurIPS 2026 RealPDE Competition (long-term test-time adaptation)"
+readme = "README.md"
+license = "MIT"
+authors = [
+    { name = "Nikolaj T. Mücke" },
+    { name = "Syver Døving Agdestein" },
+]
+# The competition's evaluation image is Python 3.10 / PyTorch 2.2.2 / numpy 1.26; the pins below match
+# final_submission/realpde/requirements-train.txt, the environment the final model was trained in.
+# torch 2.2.2 from PyPI is the CUDA 12.1 build on Linux (the same build as the `+cu121` wheel) and also runs on CPU.
+requires-python = "==3.10.*"
+dependencies = [
+    "torch==2.2.2",
+    "numpy==1.26.4",
+    "h5py==3.16.0",
+    "scipy==1.15.3",
+    "matplotlib==3.10.9",
+    "einops==0.8.2",
+]
+
+[dependency-groups]
+dev = ["pytest"]
+
+[tool.uv]
+# Scripts only (examples/, experiments/); nothing to build or install.
+package = false

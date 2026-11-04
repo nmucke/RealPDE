@@ -1,0 +1,16 @@
+/export/scratch1/ntm/tmp/fzt/clone/data/real_lco/fold0_aoa20_plus_re_extremes/train: 61 files
+/export/scratch1/ntm/tmp/fzt/clone/data/real_lco/fold0_aoa20_plus_re_extremes/heldout: 20 files
+fold fold0_aoa20_plus_re_extremes: train 61, heldout 20
+/export/scratch1/ntm/tmp/fzt/clone/data/real_lco/fold1_aoa15_plus_re_extremes/train: 61 files
+/export/scratch1/ntm/tmp/fzt/clone/data/real_lco/fold1_aoa15_plus_re_extremes/heldout: 20 files
+fold fold1_aoa15_plus_re_extremes: train 61, heldout 20
+/export/scratch1/ntm/tmp/fzt/clone/data/real_lco/fold2_aoa5_plus_re_extremes/train: 63 files
+/export/scratch1/ntm/tmp/fzt/clone/data/real_lco/fold2_aoa5_plus_re_extremes/heldout: 18 files
+fold fold2_aoa5_plus_re_extremes: train 63, heldout 18
+data/real_lco/foldR_leaderboard_mimic/train: 65 files
+data/real_lco/foldR_leaderboard_mimic/heldout: 16 files
+fold foldR_leaderboard_mimic: train 65, heldout 16
+  fold0: train 61 / heldout 20 (811 windows, expected 811: ok), train^heldout=0, 7575_0.h5=False
+  fold1: train 61 / heldout 20 (840 windows, expected 840: ok), train^heldout=0, 7575_0.h5=False
+  fold2: train 63 / heldout 18 (737 windows, expected 737: ok), train^heldout=0, 7575_0.h5=False
+  foldR: train 65 / heldout 16 (653 windows, expected 653: ok), train^heldout=0, 7575_0.h5=False

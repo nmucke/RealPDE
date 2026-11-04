@@ -1,0 +1,110 @@
+[c11a_fit_ke_flow] 65 fold-train files -> internal 55 train / 10 val (every 7th)
+[ 1/65] 10125_0.h5     Re  10142 AoA    0  29 windows (causal, batch 1)
+[ 2/65] 10125_10.h5    Re  10142 AoA   10  42 windows (causal, batch 1)
+[ 3/65] 10125_15.h5    Re  10142 AoA   15  42 windows (causal, batch 1)
+[ 4/65] 10125_20.h5    Re  10142 AoA   20  42 windows (causal, batch 1)
+[ 5/65] 10125_5.h5     Re  10142 AoA    5  42 windows (causal, batch 1)
+[ 6/65] 11400_0.h5     Re  11420 AoA    0  42 windows (causal, batch 1)
+[ 7/65] 11400_10.h5    Re  11420 AoA   10  42 windows (causal, batch 1)
+[ 8/65] 11400_15.h5    Re  11420 AoA   15  42 windows (causal, batch 1)
+[ 9/65] 11400_20.h5    Re  11420 AoA   20  42 windows (causal, batch 1)
+[10/65] 11400_5.h5     Re  11420 AoA    5  42 windows (causal, batch 1)
+[11/65] 12675_0.h5     Re  12698 AoA    0  42 windows (causal, batch 1)
+[12/65] 12675_10.h5    Re  12698 AoA   10  42 windows (causal, batch 1)
+[13/65] 12675_15.h5    Re  12698 AoA   15  42 windows (causal, batch 1)
+[14/65] 12675_20.h5    Re  12698 AoA   20  42 windows (causal, batch 1)
+[15/65] 12675_5.h5     Re  12698 AoA    5  42 windows (causal, batch 1)
+[16/65] 16500_0.h5     Re  16534 AoA    0  42 windows (causal, batch 1)
+[17/65] 16500_10.h5    Re  16534 AoA   10  42 windows (causal, batch 1)
+[18/65] 16500_15.h5    Re  16534 AoA   15  42 windows (causal, batch 1)
+[19/65] 16500_20.h5    Re  16534 AoA   20  42 windows (causal, batch 1)
+[20/65] 16500_5.h5     Re  16534 AoA    5  42 windows (causal, batch 1)
+[21/65] 17775_10.h5    Re  17812 AoA   10  42 windows (causal, batch 1)
+[22/65] 17775_15.h5    Re  17812 AoA   15  42 windows (causal, batch 1)
+[23/65] 17775_20.h5    Re  17812 AoA   20  42 windows (causal, batch 1)
+[24/65] 17775_5.h5     Re  17812 AoA    5  42 windows (causal, batch 1)
+[25/65] 19050_10.h5    Re  19090 AoA   10  42 windows (causal, batch 1)
+[26/65] 19050_15.h5    Re  19090 AoA   15  42 windows (causal, batch 1)
+[27/65] 19050_20.h5    Re  19090 AoA   20  42 windows (causal, batch 1)
+[28/65] 19050_5.h5     Re  19090 AoA    5  42 windows (causal, batch 1)
+[29/65] 20325_0.h5     Re  20369 AoA    0  42 windows (causal, batch 1)
+[30/65] 20325_10.h5    Re  20369 AoA   10  42 windows (causal, batch 1)
+[31/65] 20325_15.h5    Re  20369 AoA   15  42 windows (causal, batch 1)
+[32/65] 20325_20.h5    Re  20369 AoA   20  42 windows (causal, batch 1)
+[33/65] 20325_5.h5     Re  20369 AoA    5  42 windows (causal, batch 1)
+[34/65] 21600_0.h5     Re  21647 AoA    0  42 windows (causal, batch 1)
+[35/65] 21600_10.h5    Re  21647 AoA   10  42 windows (causal, batch 1)
+[36/65] 21600_20.h5    Re  21647 AoA   20  42 windows (causal, batch 1)
+[37/65] 22875_0.h5     Re  22926 AoA    0  42 windows (causal, batch 1)
+[38/65] 22875_10.h5    Re  22926 AoA   10  42 windows (causal, batch 1)
+[39/65] 24150_0.h5     Re  24204 AoA    0  42 windows (causal, batch 1)
+[40/65] 24150_10.h5    Re  24204 AoA   10  42 windows (causal, batch 1)
+[41/65] 24150_20.h5    Re  24204 AoA   20  13 windows (causal, batch 1)
+[42/65] 25425_0.h5     Re  25482 AoA    0  42 windows (causal, batch 1)
+[43/65] 25425_10.h5    Re  25482 AoA   10  42 windows (causal, batch 1)
+[44/65] 3750_0.h5      Re   3750 AoA    0  42 windows (causal, batch 1)
+[45/65] 3750_20.h5     Re   3750 AoA   20  42 windows (causal, batch 1)
+[46/65] 3750_5.h5      Re   3750 AoA    5  42 windows (causal, batch 1)
+[47/65] 5025_0.h5      Re   5028 AoA    0  42 windows (causal, batch 1)
+[48/65] 5025_10.h5     Re   5028 AoA   10  42 windows (causal, batch 1)
+[49/65] 5025_15.h5     Re   5028 AoA   15  42 windows (causal, batch 1)
+[50/65] 5025_20.h5     Re   5028 AoA   20  42 windows (causal, batch 1)
+[51/65] 5025_5.h5      Re   5028 AoA    5  42 windows (causal, batch 1)
+[52/65] 6300_0.h5      Re   6306 AoA    0  42 windows (causal, batch 1)
+[53/65] 6300_10.h5     Re   6306 AoA   10  42 windows (causal, batch 1)
+[54/65] 6300_15.h5     Re   6306 AoA   15  42 windows (causal, batch 1)
+[55/65] 6300_20.h5     Re   6306 AoA   20  42 windows (causal, batch 1)
+[56/65] 6300_5.h5      Re   6306 AoA    5  42 windows (causal, batch 1)
+[57/65] 7575_10.h5     Re   7585 AoA   10  42 windows (causal, batch 1)
+[58/65] 7575_15.h5     Re   7585 AoA   15  42 windows (causal, batch 1)
+[59/65] 7575_20.h5     Re   7585 AoA   20  42 windows (causal, batch 1)
+[60/65] 7575_5.h5      Re   7585 AoA    5  42 windows (causal, batch 1)
+[61/65] 8850_0.h5      Re   8863 AoA    0  42 windows (causal, batch 1)
+[62/65] 8850_10.h5     Re   8863 AoA   10  42 windows (causal, batch 1)
+[63/65] 8850_15.h5     Re   8863 AoA   15  42 windows (causal, batch 1)
+[64/65] 8850_20.h5     Re   8863 AoA   20  42 windows (causal, batch 1)
+[65/65] 8850_5.h5      Re   8863 AoA    5  42 windows (causal, batch 1)
+cache complete (65 files) in /export/scratch1/ntm/tmp/fzt/clone/data/cache/retrain_tke_flow_foldR
+[retrain_n1simvp_s3_foldR] 2281 train / 407 val windows, 42 channels (lead_e False, phase False/probe)
+[retrain_n1simvp_s3_foldR] 34,266 params; rule val e 0.5292 (tke 79.08)  trk lo 0.659 hi 0.488
+[retrain_n1simvp_s3_foldR] ep   1 train 0.5068 val 0.5172 (tke 79.45) trk lo 0.657 hi 0.485 all 0.593 (2s) *
+[retrain_n1simvp_s3_foldR] ep   2 train 0.4898 val 0.4945 (tke 80.18) trk lo 0.653 hi 0.466 all 0.582 (1s) *
+[retrain_n1simvp_s3_foldR] ep   4 train 0.4665 val 0.4787 (tke 80.69) trk lo 0.651 hi 0.462 all 0.579 (1s) *
+[retrain_n1simvp_s3_foldR] ep   5 train 0.4589 val 0.4727 (tke 80.88) trk lo 0.650 hi 0.459 all 0.577 (1s) *
+[retrain_n1simvp_s3_foldR] ep   6 train 0.4554 val 0.4718 (tke 80.91) trk lo 0.655 hi 0.472 all 0.585 (1s) *
+[retrain_n1simvp_s3_foldR] ep   7 train 0.4544 val 0.4686 (tke 81.02) trk lo 0.654 hi 0.462 all 0.582 (1s) *
+[retrain_n1simvp_s3_foldR] ep   9 train 0.4517 val 0.4672 (tke 81.06) trk lo 0.656 hi 0.464 all 0.585 (1s) *
+[retrain_n1simvp_s3_foldR] ep  10 train 0.4505 val 0.4672 (tke 81.06) trk lo 0.659 hi 0.468 all 0.588 (1s) *
+[retrain_n1simvp_s3_foldR] ep  11 train 0.4485 val 0.4670 (tke 81.07) trk lo 0.660 hi 0.473 all 0.591 (1s) *
+[retrain_n1simvp_s3_foldR] ep  12 train 0.4470 val 0.4646 (tke 81.15) trk lo 0.661 hi 0.478 all 0.594 (1s) *
+[retrain_n1simvp_s3_foldR] ep  13 train 0.4473 val 0.4640 (tke 81.17) trk lo 0.656 hi 0.472 all 0.589 (1s) *
+[retrain_n1simvp_s3_foldR] ep  14 train 0.4449 val 0.4618 (tke 81.24) trk lo 0.661 hi 0.473 all 0.590 (1s) *
+[retrain_n1simvp_s3_foldR] ep  15 train 0.4451 val 0.4639 (tke 81.17) trk lo 0.665 hi 0.477 all 0.595 (1s)
+[retrain_n1simvp_s3_foldR] ep  16 train 0.4428 val 0.4603 (tke 81.29) trk lo 0.665 hi 0.470 all 0.592 (1s) *
+[retrain_n1simvp_s3_foldR] ep  19 train 0.4425 val 0.4598 (tke 81.31) trk lo 0.669 hi 0.478 all 0.597 (1s) *
+[retrain_n1simvp_s3_foldR] ep  20 train 0.4418 val 0.4586 (tke 81.35) trk lo 0.667 hi 0.472 all 0.593 (1s) *
+[retrain_n1simvp_s3_foldR] ep  23 train 0.4389 val 0.4585 (tke 81.35) trk lo 0.669 hi 0.471 all 0.594 (1s) *
+[retrain_n1simvp_s3_foldR] ep  25 train 0.4378 val 0.4557 (tke 81.44) trk lo 0.676 hi 0.482 all 0.602 (1s) *
+[retrain_n1simvp_s3_foldR] ep  30 train 0.4367 val 0.4575 (tke 81.38) trk lo 0.675 hi 0.483 all 0.602 (1s)
+[retrain_n1simvp_s3_foldR] ep  31 train 0.4356 val 0.4551 (tke 81.46) trk lo 0.675 hi 0.484 all 0.602 (1s) *
+[retrain_n1simvp_s3_foldR] ep  35 train 0.4333 val 0.4552 (tke 81.46) trk lo 0.674 hi 0.479 all 0.600 (1s)
+[retrain_n1simvp_s3_foldR] ep  38 train 0.4318 val 0.4546 (tke 81.48) trk lo 0.675 hi 0.483 all 0.601 (1s) *
+[retrain_n1simvp_s3_foldR] ep  40 train 0.4327 val 0.4583 (tke 81.36) trk lo 0.673 hi 0.480 all 0.599 (1s)
+[retrain_n1simvp_s3_foldR] ep  45 train 0.4302 val 0.4548 (tke 81.47) trk lo 0.675 hi 0.484 all 0.602 (1s)
+[retrain_n1simvp_s3_foldR] ep  50 train 0.4282 val 0.4556 (tke 81.45) trk lo 0.674 hi 0.478 all 0.598 (1s)
+[retrain_n1simvp_s3_foldR] ep  55 train 0.4258 val 0.4564 (tke 81.42) trk lo 0.673 hi 0.474 all 0.596 (1s)
+[retrain_n1simvp_s3_foldR] ep  60 train 0.4239 val 0.4573 (tke 81.39) trk lo 0.673 hi 0.476 all 0.596 (1s)
+[retrain_n1simvp_s3_foldR] ep  65 train 0.4216 val 0.4587 (tke 81.34) trk lo 0.672 hi 0.476 all 0.595 (1s)
+[retrain_n1simvp_s3_foldR] ep  70 train 0.4200 val 0.4572 (tke 81.39) trk lo 0.672 hi 0.473 all 0.593 (1s)
+[retrain_n1simvp_s3_foldR] ep  75 train 0.4178 val 0.4609 (tke 81.27) trk lo 0.671 hi 0.472 all 0.593 (1s)
+[retrain_n1simvp_s3_foldR] ep  80 train 0.4171 val 0.4583 (tke 81.36) trk lo 0.671 hi 0.475 all 0.593 (1s)
+[retrain_n1simvp_s3_foldR] ep  85 train 0.4161 val 0.4590 (tke 81.33) trk lo 0.669 hi 0.471 all 0.591 (1s)
+[retrain_n1simvp_s3_foldR] ep  90 train 0.4148 val 0.4602 (tke 81.30) trk lo 0.669 hi 0.470 all 0.591 (1s)
+[retrain_n1simvp_s3_foldR] ep  95 train 0.4134 val 0.4621 (tke 81.23) trk lo 0.667 hi 0.467 all 0.589 (1s)
+[retrain_n1simvp_s3_foldR] ep 100 train 0.4132 val 0.4614 (tke 81.25) trk lo 0.668 hi 0.470 all 0.590 (1s)
+[retrain_n1simvp_s3_foldR] ep 105 train 0.4130 val 0.4619 (tke 81.24) trk lo 0.667 hi 0.466 all 0.588 (1s)
+[retrain_n1simvp_s3_foldR] ep 110 train 0.4118 val 0.4619 (tke 81.24) trk lo 0.667 hi 0.465 all 0.588 (1s)
+[retrain_n1simvp_s3_foldR] ep 115 train 0.4120 val 0.4621 (tke 81.23) trk lo 0.667 hi 0.466 all 0.588 (1s)
+[retrain_n1simvp_s3_foldR] ep 120 train 0.4120 val 0.4621 (tke 81.23) trk lo 0.667 hi 0.466 all 0.588 (1s)
+[retrain_n1simvp_s3_foldR] BEST val e 0.4546 (tke 81.48) trk lo 0.675 hi 0.483 all 0.601 | rule e 0.5292 trk lo 0.659 hi 0.488 all 0.596
+[retrain_n1simvp_s3_foldR] wrote experiments/d2_bundle/foldR_c/ke_net_flow.pt

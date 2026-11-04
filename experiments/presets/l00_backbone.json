@@ -1,0 +1,26 @@
+{
+  "id": "l00_backbone",
+  "group": "ladder",
+  "title": "backbone only",
+  "description": "Raw output of the packed 3-member ensemble as the prediction; no test-time adaptation and no intervals (the scorer then uses its default band for sps).",
+  "approximates": null,
+  "off": ["gain", "bias", "bounds", "advect", "prior", "ke_flow", "ctr", "ctr_basis2", "e_blend", "mu_vp", "cond_width", "cb", "cb_w0", "aw", "kw", "eb", "br", "gm20", "msk", "rec", "lowke", "lsk"],
+  "inference": {},
+  "training": {
+    "weights": "final",
+    "env": {},
+    "arch": "b5x3_h192_blk6_rf11",
+    "dry_run": {
+      "final_submission/realpde": "resolves"
+    },
+    "outputs": {
+      "model.pth, prior.npz, ke_net_flow.pt": "data/checkpoints/sp/ship_enrx3_soup4_kes4",
+      "cond_width_weights.pt": "data/checkpoints/b1_3090/ship_condwidth_v2/cond_width_weights.pt"
+    },
+    "note": "the final weights; nothing to retrain"
+  },
+  "fidelity": {
+    "with_final_weights": "n/a (component ladder on fixed weights, not an upload)",
+    "with_preset_weights": "n/a"
+  }
+}
